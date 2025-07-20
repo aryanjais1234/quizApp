@@ -1,0 +1,265 @@
+{
+	"info": {
+		"_postman_id": "cd43668c-c774-4da6-84be-e623863305c7",
+		"name": "Quiz APP",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "46053015"
+	},
+	"item": [
+		{
+			"name": "QuestionService",
+			"item": [
+				{
+					"name": "Get All Questions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8765/questionservice/question/allQuestions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8765",
+							"path": [
+								"questionservice",
+								"question",
+								"allQuestions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Questions BY Ids",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[1,4,5,9]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8765/questionservice/question/getQuestions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8765",
+							"path": [
+								"questionservice",
+								"question",
+								"getQuestions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Questions By Category",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8765/questionservice/question/category/Java",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8765",
+							"path": [
+								"questionservice",
+								"question",
+								"category",
+								"Java"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Questuion",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"questionTitle\": \"Which keyword is used to inherit a class in Java?\",\r\n        \"option1\": \"class\",\r\n        \"option2\": \"interface\",\r\n        \"option3\": \"extends\",\r\n        \"option4\": \"implements\",\r\n        \"rightAnswer\": \"extends\",\r\n        \"difficultylevel\": \"Medium\",\r\n        \"category\": \"JAVA\"\r\n    },\r\n    {\r\n        \"questionTitle\": \"Which of these is not a Java keyword?\",\r\n        \"option1\": \"class\",\r\n        \"option2\": \"if\",\r\n        \"option3\": \"then\",\r\n        \"option4\": \"new\",\r\n        \"rightAnswer\": \"then\",\r\n        \"difficultylevel\": \"Medium\",\r\n        \"category\": \"JAVA\"\r\n    },\r\n    {\r\n        \"questionTitle\": \"What is the size of int in Java?\",\r\n        \"option1\": \"4 bytes\",\r\n        \"option2\": \"2 bytes\",\r\n        \"option3\": \"8 bytes\",\r\n        \"option4\": \"1 byte\",\r\n        \"rightAnswer\": \"4 bytes\",\r\n        \"difficultylevel\": \"Easy\",\r\n        \"category\": \"JAVA\"\r\n    },\r\n    {\r\n        \"questionTitle\": \"Which method is the entry point in Java programs?\",\r\n        \"option1\": \"start()\",\r\n        \"option2\": \"run()\",\r\n        \"option3\": \"main()\",\r\n        \"option4\": \"init()\",\r\n        \"rightAnswer\": \"main()\",\r\n        \"difficultylevel\": \"Medium\",\r\n        \"category\": \"JAVA\"\r\n    },\r\n    {\r\n        \"questionTitle\": \"What is used to handle exceptions in Java?\",\r\n        \"option1\": \"try-catch\",\r\n        \"option2\": \"final\",\r\n        \"option3\": \"throwable\",\r\n        \"option4\": \"error\",\r\n        \"rightAnswer\": \"try-catch\",\r\n        \"difficultylevel\": \"Medium\",\r\n        \"category\": \"JAVA\"\r\n    },\r\n    {\r\n        \"questionTitle\": \"Which of these access specifiers is the most restrictive?\",\r\n        \"option1\": \"private\",\r\n        \"option2\": \"protected\",\r\n        \"option3\": \"default\",\r\n        \"option4\": \"public\",\r\n        \"rightAnswer\": \"private\",\r\n        \"difficultylevel\": \"Medium\",\r\n        \"category\": \"JAVA\"\r\n    },\r\n    {\r\n        \"questionTitle\": \"What is the base class of all Java classes?\",\r\n        \"option1\": \"Object\",\r\n        \"option2\": \"Class\",\r\n        \"option3\": \"System\",\r\n        \"option4\": \"Super\",\r\n        \"rightAnswer\": \"Object\",\r\n        \"difficultylevel\": \"Easy\",\r\n        \"category\": \"JAVA\"\r\n    },\r\n    {\r\n        \"questionTitle\": \"Which keyword is used to define a function in Python?\",\r\n        \"option1\": \"function\",\r\n        \"option2\": \"def\",\r\n        \"option3\": \"lambda\",\r\n        \"option4\": \"define\",\r\n        \"rightAnswer\": \"def\",\r\n        \"difficultylevel\": \"Easy\",\r\n        \"category\": \"PYTHON\"\r\n    },\r\n    {\r\n        \"questionTitle\": \"Which of the following is used for comments in Python?\",\r\n        \"option1\": \"//\",\r\n        \"option2\": \"#\",\r\n        \"option3\": \"/* */\",\r\n        \"option4\": \"<!-- -->\",\r\n        \"rightAnswer\": \"#\",\r\n        \"difficultylevel\": \"Medium\",\r\n        \"category\": \"PYTHON\"\r\n    },\r\n    {\r\n        \"questionTitle\": \"What is the output of 3 ** 2 in Python?\",\r\n        \"option1\": \"6\",\r\n        \"option2\": \"9\",\r\n        \"option3\": \"8\",\r\n        \"option4\": \"5\",\r\n        \"rightAnswer\": \"9\",\r\n        \"difficultylevel\": \"Easy\",\r\n        \"category\": \"PYTHON\"\r\n    },\r\n    {\r\n        \"questionTitle\": \"What data type is the object below: [1, 2, 3]?\",\r\n        \"option1\": \"List\",\r\n        \"option2\": \"Tuple\",\r\n        \"option3\": \"Dictionary\",\r\n        \"option4\": \"Set\",\r\n        \"rightAnswer\": \"List\",\r\n        \"difficultylevel\": \"Medium\",\r\n        \"category\": \"PYTHON\"\r\n    },\r\n    {\r\n        \"questionTitle\": \"Which Python keyword is used for loop iteration?\",\r\n        \"option1\": \"loop\",\r\n        \"option2\": \"iterate\",\r\n        \"option3\": \"for\",\r\n        \"option4\": \"foreach\",\r\n        \"rightAnswer\": \"for\",\r\n        \"difficultylevel\": \"Medium\",\r\n        \"category\": \"PYTHON\"\r\n    },\r\n    {\r\n        \"questionTitle\": \"Which of the following is a tuple?\",\r\n        \"option1\": \"[1, 2, 3]\",\r\n        \"option2\": \"{1, 2, 3}\",\r\n        \"option3\": \"(1, 2, 3)\",\r\n        \"option4\": \"{\\\"a\\\": 1}\",\r\n        \"rightAnswer\": \"(1, 2, 3)\",\r\n        \"difficultylevel\": \"Medium\",\r\n        \"category\": \"PYTHON\"\r\n    },\r\n    {\r\n        \"questionTitle\": \"Which operator is used to assign a value to a variable in JavaScript?\",\r\n        \"option1\": \"=\",\r\n        \"option2\": \"==\",\r\n        \"option3\": \"===\",\r\n        \"option4\": \"=>\",\r\n        \"rightAnswer\": \"=\",\r\n        \"difficultylevel\": \"Easy\",\r\n        \"category\": \"JAVASCRIPT\"\r\n    },\r\n    {\r\n        \"questionTitle\": \"Which symbol is used for comments in JavaScript?\",\r\n        \"option1\": \"//\",\r\n        \"option2\": \"#\",\r\n        \"option3\": \"/*\",\r\n        \"option4\": \"<!--\",\r\n        \"rightAnswer\": \"//\",\r\n        \"difficultylevel\": \"Easy\",\r\n        \"category\": \"JAVASCRIPT\"\r\n    },\r\n    {\r\n        \"questionTitle\": \"Which company developed JavaScript?\",\r\n        \"option1\": \"Netscape\",\r\n        \"option2\": \"Microsoft\",\r\n        \"option3\": \"Google\",\r\n        \"option4\": \"Oracle\",\r\n        \"rightAnswer\": \"Netscape\",\r\n        \"difficultylevel\": \"Easy\",\r\n        \"category\": \"JAVASCRIPT\"\r\n    },\r\n    {\r\n        \"questionTitle\": \"Which method converts JSON to JavaScript object?\",\r\n        \"option1\": \"JSON.parse()\",\r\n        \"option2\": \"JSON.stringify()\",\r\n        \"option3\": \"JSON.toObject()\",\r\n        \"option4\": \"JSON.toJS()\",\r\n        \"rightAnswer\": \"JSON.parse()\",\r\n        \"difficultylevel\": \"Medium\",\r\n        \"category\": \"JAVASCRIPT\"\r\n    },\r\n    {\r\n        \"questionTitle\": \"How to declare a variable in JavaScript?\",\r\n        \"option1\": \"let\",\r\n        \"option2\": \"var\",\r\n        \"option3\": \"const\",\r\n        \"option4\": \"all of the above\",\r\n        \"rightAnswer\": \"all of the above\",\r\n        \"difficultylevel\": \"Easy\",\r\n        \"category\": \"JAVASCRIPT\"\r\n    },\r\n    {\r\n        \"questionTitle\": \"Which keyword is used to define a function in JavaScript?\",\r\n        \"option1\": \"func\",\r\n        \"option2\": \"define\",\r\n        \"option3\": \"function\",\r\n        \"option4\": \"lambda\",\r\n        \"rightAnswer\": \"function\",\r\n        \"difficultylevel\": \"Easy\",\r\n        \"category\": \"JAVASCRIPT\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8765/questionservice/question/addMultiple",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8765",
+							"path": [
+								"questionservice",
+								"question",
+								"addMultiple"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Score",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"id\" : 8,\r\n        \"response\" : \"To terminate a loop or switch statement and transfer control to the next statement.\"\r\n    },\r\n    {\r\n        \"id\" : 3,\r\n        \"response\" : \"false\"\r\n    },\r\n    {\r\n        \"id\" : 9,\r\n        \"response\" : \"*\"\r\n    },\r\n    {\r\n        \"id\" : 6,\r\n        \"response\" : \"final int x = 5;\"\r\n    },\r\n    {\r\n        \"id\" : 10,\r\n        \"response\" : \"HashMap\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8765/questionservice/question/getScore",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8765",
+							"path": [
+								"questionservice",
+								"question",
+								"getScore"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "QuizService",
+			"item": [
+				{
+					"name": "Create Quiz",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"categoryName\" : \"Java\",\r\n    \"numQuestions\" : 5,\r\n    \"title\" : \"Springers Quiz 1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8765/quiz-service/quiz/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8765",
+							"path": [
+								"quiz-service",
+								"quiz",
+								"create"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "Java",
+									"disabled": true
+								},
+								{
+									"key": "numQ",
+									"value": "5",
+									"disabled": true
+								},
+								{
+									"key": "title",
+									"value": "JQuiz",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Question by Quiz Id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8765/quiz-service/quiz/get/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8765",
+							"path": [
+								"quiz-service",
+								"quiz",
+								"get",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Submit Quiz",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"id\" : 8,\r\n        \"response\" : \"To terminate a loop or switch statement and transfer control to the next statement.\"\r\n    },\r\n    {\r\n        \"id\" : 3,\r\n        \"response\" : \"false\"\r\n    },\r\n    {\r\n        \"id\" : 9,\r\n        \"response\" : \"*\"\r\n    },\r\n    {\r\n        \"id\" : 6,\r\n        \"response\" : \"final int x = 5;\"\r\n    },\r\n    {\r\n        \"id\" : 10,\r\n        \"response\" : \"HashMap\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8765/quiz-service/quiz/submit/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8765",
+							"path": [
+								"quiz-service",
+								"quiz",
+								"submit",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
