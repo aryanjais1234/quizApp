@@ -3,6 +3,7 @@ package com.Quiz.quizApp.service;
 import com.Quiz.quizApp.dao.QuestionDao;
 import com.Quiz.quizApp.dao.QuizDao;
 import com.Quiz.quizApp.dto.QuizQuestionResponse;
+import com.Quiz.quizApp.dto.QuizResponseSubmit;
 import com.Quiz.quizApp.model.Question;
 import com.Quiz.quizApp.model.Quiz;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,5 +52,24 @@ public class QuizService {
                 question.getOption3(),
                 question.getOption4()
         );
+    }
+
+    public Integer calculateResult(List<QuizResponseSubmit> quizResponseSubmit, Integer id) {
+        Optional<Quiz> quiz = quizDao.findById(id);
+        List<Question> questions = quiz.get().getQuestions();
+        int right = 0;
+
+//        for (QuizResponseSubmit response : quizResponseSubmit) {
+//            for (Question q : questions) {
+//                if (q.getId().equals(response.getId()) && q.getRightAnswer().equals(response.getResponse()))
+//                    right++;
+//            }
+//        }
+        right = (int) quizResponseSubmit.stream()
+                .filter(response -> questions.stream()
+                        .anyMatch(q -> q.getId().equals(response.getId()) &&
+                                q.getRightAnswer().equals(response.getResponse())))
+                .count();
+        return right;
     }
 }
