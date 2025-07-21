@@ -1,5 +1,7 @@
 package com.quizService.quizService.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.quizService.quizService.dto.QuizQuestionResponse;
 import com.quizService.quizService.dto.QuizResponseSubmit;
 import com.quizService.quizService.dto.QuizDto;
@@ -10,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 @RestController
 @RequestMapping("quiz")
 public class QuizController {
@@ -30,7 +31,12 @@ public class QuizController {
 
     @PostMapping("submit/{id}")
     public ResponseEntity<Integer> submitQuiz(@RequestBody List<QuizResponseSubmit> quizResponseSubmit, @PathVariable Integer id){
-        return new ResponseEntity<>(quizService.calculateResult(quizResponseSubmit,id),HttpStatus.OK);
+        try {
+            System.out.println("Received JSON: " + new ObjectMapper().writeValueAsString(quizResponseSubmit));
+            return new ResponseEntity<>(quizService.calculateResult(quizResponseSubmit,id),HttpStatus.OK);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
-    
+
 }
