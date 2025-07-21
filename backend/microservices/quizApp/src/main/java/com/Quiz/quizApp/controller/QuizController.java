@@ -2,7 +2,6 @@ package com.Quiz.quizApp.controller;
 
 import com.Quiz.quizApp.dto.QuizQuestionResponse;
 import com.Quiz.quizApp.dto.QuizResponseSubmit;
-import com.Quiz.quizApp.model.Question;
 import com.Quiz.quizApp.service.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
