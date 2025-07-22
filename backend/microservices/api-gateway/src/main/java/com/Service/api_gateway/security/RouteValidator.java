@@ -11,17 +11,13 @@ public class RouteValidator {
 
     public static final List<String> openApiEndpoints = List.of(
             "/auth/register",
-            "/auth/login",
-            "/auth/validate",
-            "/eureka",
-            "/quiz-service/quiz/get",   // <- allow this only if you want it open
-            "/quiz-service/quiz/submit" // <- or not, based on your role config
+            "auth/login",
+            "auth/validate",
+            "/eureka"
     );
-
 
     public Predicate<ServerHttpRequest> isSecured =
             request -> openApiEndpoints
                     .stream()
-                    .noneMatch(uri -> request.getURI().getPath().startsWith(uri));
-
+                    .noneMatch(uri -> request.getURI().getPath().contains(uri));
 }
