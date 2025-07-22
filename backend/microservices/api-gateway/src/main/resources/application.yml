@@ -4,26 +4,43 @@ spring:
 
   cloud:
     gateway:
-      discovery:
-        locator:
-          enabled: true
       server:
         webflux:
+          discovery:
+            locator:
+              enabled: true
+              lower-case-service-id: true
+
           globalcors:
             cors-configurations:
               '[/**]':
-                          allowedOrigins: "http://localhost:5173"
-                          allowedMethods:
-                            - GET
-                            - POST
-                            - PUT
-                            - DELETE
-                            - OPTIONS
-                          allowedHeaders: "*"
-                          allowCredentials: true
-          discovery:
-            locator:
-              lower-case-service-id: true
+                allowedOrigins: "http://localhost:5173"
+                allowedMethods:
+                  - GET
+                  - POST
+                  - PUT
+                  - DELETE
+                  - OPTIONS
+                allowedHeaders: "*"
+                allowCredentials: true
+
+          routes:
+            - id: quiz-service
+              uri: http://quiz-service
+              predicates:
+                - Path=/quiz-service/**  # Make sure this matches actual request path
+
+              filters:
+                - StripPrefix=1
+                - AuthFilter
+
+
+            - id: questionservice
+              uri: http://questionservice
+              predicates:
+                - Path=/questionservice/**
+              filters:
+                - AuthFilter
 
 server:
   port: 8765
