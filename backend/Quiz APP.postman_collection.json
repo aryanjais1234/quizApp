@@ -12,17 +12,26 @@
 				{
 					"name": "Get All Questions",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9URUFDSEVSIiwic3ViIjoidGVhY2hlciIsImlhdCI6MTc1MzMwMTA2MSwiZXhwIjoxNzUzMzM3MDYxfQ.DGPEGlxWRPhlpyAmqB7vYUok-txSXWpsscEmJJxSAKE",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8765/questionservice/question/allQuestions",
+							"raw": "http://localhost:8765/question/allQuestions",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8765",
 							"path": [
-								"questionservice",
 								"question",
 								"allQuestions"
 							]
@@ -33,6 +42,16 @@
 				{
 					"name": "Get Questions BY Ids",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9URUFDSEVSIiwic3ViIjoidGVhY2hlciIsImlhdCI6MTc1MzMwMTA2MSwiZXhwIjoxNzUzMzM3MDYxfQ.DGPEGlxWRPhlpyAmqB7vYUok-txSXWpsscEmJJxSAKE",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -45,14 +64,13 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8765/questionservice/question/getQuestions",
+							"raw": "http://localhost:8765/question/getQuestions",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8765",
 							"path": [
-								"questionservice",
 								"question",
 								"getQuestions"
 							]
@@ -63,17 +81,26 @@
 				{
 					"name": "Get Questions By Category",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9URUFDSEVSIiwic3ViIjoidGVhY2hlciIsImlhdCI6MTc1MzMwMTA2MSwiZXhwIjoxNzUzMzM3MDYxfQ.DGPEGlxWRPhlpyAmqB7vYUok-txSXWpsscEmJJxSAKE",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8765/questionservice/question/category/Java",
+							"raw": "http://localhost:8765/question/category/Java",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8765",
 							"path": [
-								"questionservice",
 								"question",
 								"category",
 								"Java"
@@ -85,6 +112,16 @@
 				{
 					"name": "Add Questuion",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9URUFDSEVSIiwic3ViIjoidGVhY2hlciIsImlhdCI6MTc1MzMwMTA2MSwiZXhwIjoxNzUzMzM3MDYxfQ.DGPEGlxWRPhlpyAmqB7vYUok-txSXWpsscEmJJxSAKE",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -97,14 +134,13 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8765/questionservice/question/addMultiple",
+							"raw": "http://localhost:8765/question/addMultiple",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8765",
 							"path": [
-								"questionservice",
 								"question",
 								"addMultiple"
 							]
@@ -115,6 +151,16 @@
 				{
 					"name": "Get Score",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9URUFDSEVSIiwic3ViIjoidGVhY2hlciIsImlhdCI6MTc1MzMwMTA2MSwiZXhwIjoxNzUzMzM3MDYxfQ.DGPEGlxWRPhlpyAmqB7vYUok-txSXWpsscEmJJxSAKE",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -127,14 +173,13 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8765/questionservice/question/getScore",
+							"raw": "http://localhost:8765/question/getScore",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8765",
 							"path": [
-								"questionservice",
 								"question",
 								"getScore"
 							]
@@ -150,11 +195,21 @@
 				{
 					"name": "Create Quiz",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9URUFDSEVSIiwic3ViIjoidGVhY2hlciIsImlhdCI6MTc1MzMwMDQ5MCwiZXhwIjoxNzUzMzM2NDkwfQ.oFgXw08bYWCoOZBarW7NDnMHIqRAGR4B2xsV8QSlIEE",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"categoryName\" : \"Java\",\r\n    \"numQuestions\" : 5,\r\n    \"title\" : \"Springers Quiz 1\"\r\n}",
+							"raw": "{\r\n    \"categoryName\" : \"Java\",\r\n    \"numQuestions\" : 1,\r\n    \"title\" : \"Springers Quiz 7\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -162,14 +217,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8765/quiz-service/quiz/create",
+							"raw": "http://localhost:8765/quiz/quiz/create",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8765",
 							"path": [
-								"quiz-service",
+								"quiz",
 								"quiz",
 								"create"
 							],
@@ -200,6 +255,16 @@
 						"disableBodyPruning": true
 					},
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9URUFDSEVSIiwic3ViIjoidGVhY2hlciIsImlhdCI6MTc1MzMwMTA2MSwiZXhwIjoxNzUzMzM3MDYxfQ.DGPEGlxWRPhlpyAmqB7vYUok-txSXWpsscEmJJxSAKE",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"body": {
@@ -212,17 +277,17 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8765/quiz-service/quiz/get/1",
+							"raw": "http://localhost:8765/quiz/quiz/get/6",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8765",
 							"path": [
-								"quiz-service",
+								"quiz",
 								"quiz",
 								"get",
-								"1"
+								"6"
 							]
 						}
 					},
@@ -231,6 +296,16 @@
 				{
 					"name": "Submit Quiz",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9TVFVERU5UIiwic3ViIjoic3R1ZGVudDEiLCJpYXQiOjE3NTMzMDE1NDgsImV4cCI6MTc1MzMzNzU0OH0.BVSD9r1ElspVDoRczwgRxQLpnhFRffzwt2oIjnAdUoo",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -243,17 +318,80 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8765/quiz-service/quiz/submit/1",
+							"raw": "http://localhost:8765/quiz/quiz/submit/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8765",
 							"path": [
-								"quiz-service",
+								"quiz",
 								"quiz",
 								"submit",
 								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "UserService",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\r\n    \"username\":\"student1\",\r\n    \"password\":\"aryan\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8765/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8765",
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\r\n    \"username\":\"student1\",\r\n    \"password\":\"aryan\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8765/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8765",
+							"path": [
+								"auth",
+								"register"
 							]
 						}
 					},

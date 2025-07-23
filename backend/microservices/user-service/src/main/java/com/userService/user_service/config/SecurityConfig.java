@@ -29,6 +29,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests(configurer ->
                         configurer
                                 .requestMatchers("/auth/**").permitAll()
+                                .anyRequest().authenticated()
 //                                .requestMatchers("/question/**", "/quiz/create").hasRole("TEACHER")
 //                                .requestMatchers("/quiz-service/quiz/get/**", "/quiz/submit/**").hasRole("STUDENT")
 //                                .anyRequest().authenticated()
