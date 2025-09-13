@@ -32,10 +32,12 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
     public GatewayFilter apply(Config config) {
         return ((exchange, chain) -> {
             String path = exchange.getRequest().getURI().getPath();
-
-            if (path.startsWith("/auth/")) {
-                System.out.println("===========Login hit============");
+            if (path.startsWith("/auth/register") || path.startsWith("/auth/login")) {
+                System.out.println("===========Auth hit============");
                 return chain.filter(exchange);
+            }
+            if (!exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
+                throw new RuntimeException("Missing authorization header");
             }
 
             if (validator.isSecured.test(exchange.getRequest())) {
@@ -62,15 +64,20 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
                     System.out.println("User Role from JWT: " + role);
 
                     // ✅ Optional: restrict endpoint based on role
-                    if (path.startsWith("/question/") || path.startsWith("/quiz/create")) {
+                    if (path.startsWith("/question/") || path.startsWith("/quiz//create")) {
                         if (!"ROLE_TEACHER".equalsIgnoreCase(role)) {
                             throw new RuntimeException("Access Denied: Only teachers can access this route");
                         }
                     }
 
-                    if (path.startsWith("/quiz/submit")) {
+                    if (path.startsWith("/quiz//submit")) {
                         if (!"ROLE_STUDENT".equalsIgnoreCase(role)) {
                             throw new RuntimeException("Access Denied: Only students can submit quizzes");
+                        }
+                    }
+                    if (path.startsWith("/quiz/create")) {
+                        if (!"ROLE_TEACHER".equalsIgnoreCase(role)) {
+                            throw new RuntimeException("Access Denied: Only teachers can create quizzes");
                         }
                     }
 

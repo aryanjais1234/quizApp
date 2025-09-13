@@ -1,86 +1,107 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import { useState } from 'react';
+import { login as loginApi } from '../api/api';
+import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
-const Login = ({ onLogin }) => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+const Login = () => {
+  const [credentials, setCredentials] = useState({
+    username: '',
+    password: ''
+  });
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleChange = (e) => {
+    setCredentials({
+      ...credentials,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     setError('');
 
     try {
-      const response = await axios.post('http://localhost:8765/auth/login', {
-        username,
-        password
-      });
-
-      const { token } = response.data;
-      localStorage.setItem('token', "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9TVFVERU5UIiwic3ViIjoic3R1ZGVudDEiLCJpYXQiOjE3NTMzMDE1NDgsImV4cCI6MTc1MzMzNzU0OH0.BVSD9r1ElspVDoRczwgRxQLpnhFRffzwt2oIjnAdUoo"); // Store the token
-
-      if (onLogin) onLogin(); // Optional callback to refresh state
+      const response = await loginApi(credentials);
+      const token = response.data;
+      
+      // Extract username and role from credentials for user object
+      const userData = {
+        username: credentials.username,
+        // You might want to decode the JWT token to get role information
+        role: 'USER' // Default role, could be extracted from token
+      };
+      
+      login(token, userData);
+      navigate('/');
     } catch (err) {
-      console.error("Login failed:", err.response?.data || err.message);
-      setError('Invalid credentials. Please try again.');
+      setError(err.response?.data?.message || 'Login failed. Please check your credentials.');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div style={styles.container}>
+    <div style={{ padding: '2rem', maxWidth: '400px', margin: '0 auto' }}>
       <h2>Login</h2>
-      <form onSubmit={handleLogin} style={styles.form}>
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          style={styles.input}
-        />
-        <input
-          type="text"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          style={styles.input}
-        />
-        <button type="submit" style={styles.button}>Login</button>
+      <form onSubmit={handleSubmit}>
+        <div style={{ marginBottom: '1rem' }}>
+          <label>Username:</label>
+          <input
+            type="text"
+            name="username"
+            value={credentials.username}
+            onChange={handleChange}
+            required
+            style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem' }}
+          />
+        </div>
+        
+        <div style={{ marginBottom: '1rem' }}>
+          <label>Password:</label>
+          <input
+            type="password"
+            name="password"
+            value={credentials.password}
+            onChange={handleChange}
+            required
+            style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem' }}
+          />
+        </div>
+
+        {error && (
+          <div style={{ color: 'red', marginBottom: '1rem' }}>
+            {error}
+          </div>
+        )}
+
+        <button 
+          type="submit" 
+          disabled={loading}
+          style={{ 
+            width: '100%', 
+            padding: '0.75rem', 
+            backgroundColor: '#007bff',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: loading ? 'not-allowed' : 'pointer'
+          }}
+        >
+          {loading ? 'Logging in...' : 'Login'}
+        </button>
       </form>
-      {error && <p style={styles.error}>{error}</p>}
+      
+      <p style={{ textAlign: 'center', marginTop: '1rem' }}>
+        Don't have an account? <a href="/register">Register here</a>
+      </p>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    maxWidth: '400px',
-    margin: '100px auto',
-    padding: '30px',
-    border: '1px solid #ccc',
-    borderRadius: '10px',
-    textAlign: 'center',
-  },
-  form: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '15px',
-  },
-  input: {
-    padding: '10px',
-    fontSize: '16px',
-  },
-  button: {
-    padding: '10px',
-    fontSize: '16px',
-    backgroundColor: '#007bff',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '5px',
-  },
-  error: {
-    marginTop: '10px',
-    color: 'red',
-  },
 };
 
 export default Login;

@@ -7,17 +7,7 @@ spring:
 
   cloud:
     gateway:
-      cors-configurations:
-        '[/**]':
-          allowedOrigins: "http://localhost:5173"
-          allowedMethods:
-            - GET
-            - POST
-            - PUT
-            - DELETE
-            - OPTIONS
-          allowedHeaders: "*"
-          allowCredentials: true
+
       routes:
         - id: quiz-service
           uri: lb://QUIZ-SERVICE
@@ -37,6 +27,14 @@ spring:
           uri: lb://USER-SERVICE
           predicates:
             - Path=/auth/**
+
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:5173"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+            allowCredentials: true
 
 eureka:
   client:

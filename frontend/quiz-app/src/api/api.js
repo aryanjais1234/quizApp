@@ -1,28 +1,50 @@
 import axios from 'axios';
 
-const quizBase = "http://localhost:8765/quiz";
-const questionBase = "http://localhost:8765/questionservice/question";
+// Base API configuration matching backend gateway
+const API_BASE = "http://localhost:8765";
+const quizBase = `${API_BASE}/quiz/`;
+const questionBase = `${API_BASE}/question`;
+const authBase = `${API_BASE}/auth`;
 
-// Pass token manually instead of using localStorage
-const getAuthHeaders = (token) =>
-  token ? { Authorization: `Bearer ${eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9TVFVERU5UIiwic3ViIjoic3R1ZGVudDEiLCJpYXQiOjE3NTMzMDE1NDgsImV4cCI6MTc1MzMzNzU0OH0.BVSD9r1ElspVDoRczwgRxQLpnhFRffzwt2oIjnAdUoo}` } : {};
+// Create axios instance with interceptors for auth
+const apiClient = axios.create({
+  baseURL: API_BASE,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
 
-// ---------------------- QUIZ APIs ----------------------
-
-export const createQuiz = (data, token) =>
-  axios.post(`${quizBase}/create`, data, {
-    headers: {
-      ...getAuthHeaders(token),
-      "Content-Type": "application/json"
+// Add auth token to requests
+apiClient.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
-  });
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
-export const getQuizQuestions = (id, token) =>
-  axios.get(`${quizBase}/get/${id}`, {
-    headers: getAuthHeaders(token)
-  });
+// Auth APIs
+export const login = (credentials) => 
+  axios.post(`${authBase}/login`, credentials);
 
-export const submitQuiz = (id, data, token) => {
+export const register = (userData) => 
+  axios.post(`${authBase}/register`, userData);
+
+// Quiz APIs - matching backend endpoints
+export const createQuiz = (data) => {
+  // Backend expects: { categoryName, numQuestions, title }
+  return apiClient.post(`${quizBase}/create`, data);
+};
+
+export const getQuizQuestions = (id) => 
+  apiClient.get(`${quizBase}/get/${id}`);
+
+export const submitQuiz = (id, data) => {
   const endpoint = `${quizBase}/submit/${id}`;
   const payload = data.map(item => ({
     id: item.questionId,
@@ -33,46 +55,29 @@ export const submitQuiz = (id, data, token) => {
   console.log("➡️ Endpoint:", endpoint);
   console.log("📦 Payload:", JSON.stringify(payload, null, 2));
 
-  return axios.post(endpoint, payload, {
-    headers: {
-      ...getAuthHeaders(token),
-      "Content-Type": "application/json"
-    }
-  })
-  .then(res => {
-    console.log("✅ Quiz Score:", res.data);
-    return res.data;
-  })
-  .catch(err => {
-    console.error("❌ Submit Error:", err.response?.data || err.message);
-    throw err;
-  });
+  return apiClient.post(endpoint, payload)
+    .then(res => {
+      console.log("✅ Quiz Score:", res.data);
+      return res.data;
+    })
+    .catch(err => {
+      console.error("❌ Submit Error:", err.response?.data || err.message);
+      throw err;
+    });
 };
 
-// ---------------------- QUESTION APIs ----------------------
+// Question APIs - matching backend endpoints
+export const getAllQuestions = () => 
+  apiClient.get(`${questionBase}/allQuestions`);
 
-export const getAllQuestions = (token) =>
-  axios.get(`${questionBase}/allQuestions`, {
-    headers: getAuthHeaders(token)
-  });
+export const getQuestionsByCategory = (category) => 
+  apiClient.get(`${questionBase}/category/${category}`);
 
-export const addQuestion = (data, token) =>
-  axios.post(`${questionBase}/add`, data, {
-    headers: {
-      ...getAuthHeaders(token),
-      "Content-Type": "application/json"
-    }
-  });
+export const addQuestions = (questionsArray) => 
+  apiClient.post(`${questionBase}/addMultiple`, questionsArray);
 
-export const generateQuiz = (category, numQuestions, token) =>
-  axios.get(`${questionBase}/generate?categoryName=${category}&numQuestions=${numQuestions}`, {
-    headers: getAuthHeaders(token)
-  });
+export const getQuestionsByIds = (ids) => 
+  apiClient.post(`${questionBase}/getQuestions`, ids);
 
-export const getQuestionsByIds = (ids, token) =>
-  axios.post(`${questionBase}/getQuestions`, ids, {
-    headers: {
-      ...getAuthHeaders(token),
-      "Content-Type": "application/json"
-    }
-  });
+export const getScore = (responses) => 
+  apiClient.post(`${questionBase}/getScore`, responses);

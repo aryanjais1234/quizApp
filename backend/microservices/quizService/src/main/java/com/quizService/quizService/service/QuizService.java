@@ -21,7 +21,7 @@ public class QuizService {
     @Autowired
     QuizInterface quizInterface;
 
-    public String createQuiz(QuizDto quizDto) {
+    public Integer createQuiz(QuizDto quizDto) {
 
         List<Integer> questions = quizInterface.getQuestionsForQuiz(quizDto.getCategoryName(),quizDto.getNumQuestions()).getBody();
 
@@ -31,7 +31,7 @@ public class QuizService {
 
         quizDao.save(quiz);
 
-        return "Success";
+        return quiz.getId();
     }
 
     public List<QuizQuestionResponse> getQuizQuestions(Integer id) {
