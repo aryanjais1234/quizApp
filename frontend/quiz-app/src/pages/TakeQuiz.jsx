@@ -16,6 +16,10 @@ const TakeQuiz = () => {
   // Fetch quiz questions
   const fetchQuiz = async () => {
     try {
+      localStorage.setItem(
+        "token",
+        "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9TVFVERU5UIiwic3ViIjoic3R1ZGVudDEiLCJpYXQiOjE3NTMzMDE1NDgsImV4cCI6MTc1MzMzNzU0OH0.BVSD9r1ElspVDoRczwgRxQLpnhFRffzwt2oIjnAdUoo"
+      );
       const res = await getQuizQuestions(quizId);
       setQuestions(res.data);
       setError("");
@@ -95,7 +99,13 @@ const TakeQuiz = () => {
 
       {/* Final Score */}
       {score !== null && (
-        <p style={{ marginTop: "1.5rem", fontWeight: "bold", fontSize: "1.2rem" }}>
+        <p
+          style={{
+            marginTop: "1.5rem",
+            fontWeight: "bold",
+            fontSize: "1.2rem",
+          }}
+        >
           🎯 Your Score: {score} / {questions.length}
         </p>
       )}
