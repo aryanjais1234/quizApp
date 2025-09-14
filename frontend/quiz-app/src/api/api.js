@@ -41,8 +41,14 @@ export const getRoleFromToken = (token) =>
 
 // Quiz APIs - matching backend endpoints
 export const createQuiz = (data) => {
-  // Backend expects: { categoryName, numQuestions, title }
-  return apiClient.post(`${quizBase}/create`, data);
+  // Backend expects query parameters: category, numQ, title
+  return apiClient.post(`${quizBase}/create`, null, {
+    params: {
+      category: data.categoryName,
+      numQ: data.numQuestions,
+      title: data.title
+    }
+  });
 };
 
 export const getQuizQuestions = (id) => 
