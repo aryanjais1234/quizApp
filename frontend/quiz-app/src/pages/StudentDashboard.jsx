@@ -65,7 +65,7 @@ const StudentDashboard = () => {
     if (quizHistory.length === 0) return { totalQuizzes: 0, averageScore: 0, bestScore: 0 };
     
     const totalQuizzes = quizHistory.length;
-    const scores = quizHistory.map(quiz => getScorePercentage(quiz.score, quiz.totalQuestions));
+    const scores = quizHistory.map(quiz => quiz.percentage || getScorePercentage(quiz.score, quiz.totalQuestions));
     const averageScore = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
     const bestScore = Math.max(...scores);
     
@@ -227,7 +227,7 @@ const StudentDashboard = () => {
       ) : (
         <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
           {quizHistory.map((quiz) => {
-            const percentage = getScorePercentage(quiz.score, quiz.totalQuestions);
+            const percentage = quiz.percentage || getScorePercentage(quiz.score, quiz.totalQuestions);
             return (
               <div
                 key={quiz.id}
@@ -263,7 +263,7 @@ const StudentDashboard = () => {
                       fontSize: "1.25rem",
                       fontWeight: "600"
                     }}>
-                      {quiz.title}
+                      {quiz.quizTitle || `Quiz ${quiz.quizId}`}
                     </h3>
                     <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
                       <span style={{
@@ -289,7 +289,7 @@ const StudentDashboard = () => {
                       color: getScoreColor(percentage),
                       marginBottom: "0.25rem"
                     }}>
-                      {getGradeEmoji(percentage)} {percentage}%
+                      {getGradeEmoji(percentage)} {Math.round(percentage)}%
                     </div>
                     <div style={{ 
                       fontSize: "0.875rem",
@@ -306,8 +306,7 @@ const StudentDashboard = () => {
                   color: "#6c757d",
                   fontSize: "0.875rem"
                 }}>
-                  <span>📅 {formatDate(quiz.dateTaken)}</span>
-                  <span>⏱️ {quiz.timeSpent}</span>
+                  <span>📅 {formatDate(quiz.submittedAt)}</span>
                   <span style={{ 
                     color: "#007bff",
                     textDecoration: "underline",

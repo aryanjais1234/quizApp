@@ -29,58 +29,6 @@ const QuizAnalytics = () => {
     } catch (err) {
       console.error("Error fetching quiz analytics:", err);
       setError("Failed to load quiz analytics. Please try again.");
-      // For now, using mock data since backend endpoint doesn't exist yet
-      setAnalytics({
-        quiz: {
-          id: quizId,
-          title: "Java Basics Quiz",
-          category: "Java",
-          totalQuestions: 5,
-          createdDate: "2024-01-15"
-        },
-        attempts: [
-          {
-            id: 1,
-            studentName: "John Doe",
-            studentId: "student1",
-            score: 4,
-            totalQuestions: 5,
-            completedAt: "2024-01-20 10:30:00",
-            timeSpent: "8 minutes",
-            percentage: 80
-          },
-          {
-            id: 2,
-            studentName: "Jane Smith",
-            studentId: "student2",
-            score: 5,
-            totalQuestions: 5,
-            completedAt: "2024-01-20 14:15:00",
-            timeSpent: "6 minutes",
-            percentage: 100
-          },
-          {
-            id: 3,
-            studentName: "Bob Johnson",
-            studentId: "student3",
-            score: 3,
-            totalQuestions: 5,
-            completedAt: "2024-01-21 09:45:00",
-            timeSpent: "12 minutes",
-            percentage: 60
-          },
-          {
-            id: 4,
-            studentName: "Alice Brown",
-            studentId: "student4",
-            score: 4,
-            totalQuestions: 5,
-            completedAt: "2024-01-21 16:20:00",
-            timeSpent: "9 minutes",
-            percentage: 80
-          }
-        ]
-      });
     } finally {
       setLoading(false);
     }
@@ -206,18 +154,18 @@ const QuizAnalytics = () => {
                   fontSize: "0.875rem",
                   marginLeft: "0.5rem"
                 }}>
-                  {analytics.quiz.category}
+                  {analytics.quiz.categoryName}
                 </span>
               </p>
             </div>
             <div>
               <p style={{ margin: "0.25rem 0", color: "#6c757d" }}>
-                <strong style={{ color: "#495057" }}>Total Questions:</strong> {analytics.quiz.totalQuestions}
+                <strong style={{ color: "#495057" }}>Total Questions:</strong> {analytics.quiz.numQuestions}
               </p>
             </div>
             <div>
               <p style={{ margin: "0.25rem 0", color: "#6c757d" }}>
-                <strong style={{ color: "#495057" }}>Created:</strong> {analytics.quiz.createdDate}
+                <strong style={{ color: "#495057" }}>Created:</strong> {new Date(analytics.quiz.createdDate).toLocaleDateString()}
               </p>
             </div>
           </div>
@@ -407,9 +355,9 @@ const QuizAnalytics = () => {
               </div>
 
               <div style={{ textAlign: "center", fontSize: "0.875rem", color: "#6c757d" }}>
-                {new Date(attempt.completedAt).toLocaleDateString()}
+                {new Date(attempt.submittedAt).toLocaleDateString()}
                 <br />
-                {new Date(attempt.completedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                {new Date(attempt.submittedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
               </div>
             </div>
           ))}
