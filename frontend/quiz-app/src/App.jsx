@@ -11,6 +11,8 @@ import AddQuestion from "./pages/AddQuestion";
 import ViewQuestions from "./pages/ViewQuestions";
 import TeacherDashboard from "./pages/TeacherDashboard";
 import StudentDashboard from "./pages/StudentDashboard";
+import QuizAnalytics from "./pages/QuizAnalytics";
+import QuizResult from "./pages/QuizResult";
 import Header from "./components/Header";
 
 function App() {
@@ -30,6 +32,8 @@ function App() {
           <Route path="/view-questions" element={<ViewQuestions />} />
           <Route path="/teacher-dashboard" element={<TeacherDashboard />} />
           <Route path="/student-dashboard" element={<StudentDashboard />} />
+          <Route path="/quiz-analytics/:quizId" element={<QuizAnalytics />} />
+          <Route path="/quiz-result/:quizId" element={<QuizResult />} />
         </Routes>
       </Router>
     </AuthProvider>
