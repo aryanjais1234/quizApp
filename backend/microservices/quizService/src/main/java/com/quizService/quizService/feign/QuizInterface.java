@@ -1,6 +1,7 @@
 package com.quizService.quizService.feign;
 
 import com.quizService.quizService.dto.QuizQuestionResponse;
+import com.quizService.quizService.dto.QuizQuestionStudentResponse;
 import com.quizService.quizService.dto.QuizResponseSubmit;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,9 @@ public interface QuizInterface {
 
     @PostMapping("question/getQuestions")
     public ResponseEntity<List<QuizQuestionResponse>> getQuestionFromId(@RequestBody List<Integer> questionIds);
+
+    @PostMapping("question/getQuestionDetails")
+    public ResponseEntity<List<QuizQuestionStudentResponse>> getQuestionFromIdForResponse(@RequestBody List<Integer> questionIds);
 
     @PostMapping("question/getScore")
     public ResponseEntity<Integer> getScore(@RequestBody List<QuizResponseSubmit> quizResponseSubmit);

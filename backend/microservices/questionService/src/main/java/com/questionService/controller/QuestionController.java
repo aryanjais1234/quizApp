@@ -2,6 +2,7 @@ package com.questionService.controller;
 
 import com.questionService.dto.QuizQuestionResponse;
 import com.questionService.dto.QuizResponseSubmit;
+import com.questionService.dto.QuizStudentQuestion;
 import com.questionService.model.Question;
 import com.questionService.service.QuestionService;
 import lombok.extern.slf4j.Slf4j;
@@ -66,6 +67,13 @@ public class QuestionController {
     public ResponseEntity<List<QuizQuestionResponse>> getQuestionFromId(@RequestBody List<Integer> questionIds){
         return new ResponseEntity<>(questionService.getQuestionFromId(questionIds),HttpStatus.OK);
     }
+
+    @PostMapping("getQuestionDetails")
+    public ResponseEntity<List<QuizStudentQuestion>> getQuestionFromIdForResponse(@RequestBody List<Integer> questionIds){
+        return new ResponseEntity<>(questionService.getQuestionForStudentResponse(questionIds),HttpStatus.OK);
+    }
+
+
 
     @PostMapping("getScore")
     public ResponseEntity<Integer> getScore(@RequestBody List<QuizResponseSubmit> quizResponseSubmit){

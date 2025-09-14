@@ -3,6 +3,7 @@ package com.quizService.quizService.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.quizService.quizService.dto.*;
+import com.quizService.quizService.model.QuizSubmission;
 import com.quizService.quizService.service.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,9 +31,9 @@ public class QuizController {
     }
 
     @PostMapping("submit/{id}")
-    public ResponseEntity<Integer> submitQuiz(@RequestBody List<QuizResponseSubmit> quizResponseSubmit, 
-                                            @PathVariable Integer id, 
-                                            @RequestHeader("username") String username){
+    public ResponseEntity<Integer> submitQuiz(@RequestBody List<QuizResponseSubmit> quizResponseSubmit,
+                                              @PathVariable Integer id,
+                                              @RequestHeader("username") String username){
         try {
             System.out.println("Received JSON: " + new ObjectMapper().writeValueAsString(quizResponseSubmit));
             return new ResponseEntity<>(quizService.calculateResult(quizResponseSubmit, id, username), HttpStatus.OK);
@@ -51,9 +52,14 @@ public class QuizController {
         return new ResponseEntity<>(quizService.getStudentQuizHistory(username), HttpStatus.OK);
     }
 
+    @GetMapping("student/result/{responseId}")
+    public ResponseEntity<StudentQuizResultDto> getStudentQuizResults(@PathVariable Integer responseId) {
+        return new ResponseEntity<>(quizService.getStudentQuizResults(responseId), HttpStatus.OK);
+    }
     @GetMapping("analytics/{quizId}")
-    public ResponseEntity<String> getQuizAnalytics(@PathVariable Integer quizId) {
+    public ResponseEntity<List<StudentQuizResultDto> > getQuizAnalytics(@PathVariable Integer quizId) {
         // Placeholder for analytics endpoint
-        return new ResponseEntity<>("Analytics for quiz " + quizId, HttpStatus.OK);
+        List<StudentQuizResultDto> quizSubmissions = quizService.getQuizAnalytics(quizId);
+        return new ResponseEntity<>(quizSubmissions, HttpStatus.OK);
     }
 }

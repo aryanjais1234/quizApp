@@ -16,6 +16,7 @@ public class Quiz {
     private String title;
     private String categoryName;
     private String createdBy; // Username of the teacher who created the quiz
+    private Integer userId;
     private LocalDateTime createdDate;
 
     @ElementCollection

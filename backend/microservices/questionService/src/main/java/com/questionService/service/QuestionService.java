@@ -3,6 +3,7 @@ package com.questionService.service;
 import com.questionService.dao.QuestionDao;
 import com.questionService.dto.QuizQuestionResponse;
 import com.questionService.dto.QuizResponseSubmit;
+import com.questionService.dto.QuizStudentQuestion;
 import com.questionService.model.Question;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -89,5 +90,25 @@ public class QuestionService {
                 .count();
 
         return right;
+    }
+
+    public List<QuizStudentQuestion> getQuestionForStudentResponse(List<Integer> questionIds) {
+        List<Question> questions = questionIds.stream()
+                .map(questionDao::findById)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
+
+        return questions.stream()
+                .map(question -> new QuizStudentQuestion(
+                        question.getId(),
+                        question.getQuestionTitle(),
+                        question.getOption1(),
+                        question.getOption2(),
+                        question.getOption3(),
+                        question.getOption4(),
+                        question.getRightAnswer()
+                ))
+                .collect(Collectors.toList());
     }
 }

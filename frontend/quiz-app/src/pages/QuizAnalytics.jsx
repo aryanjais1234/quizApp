@@ -1,30 +1,25 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { getQuizAnalytics } from "../api/api";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate, useParams } from "react-router-dom";
 
 const QuizAnalytics = () => {
-  const [analytics, setAnalytics] = useState(null);
+  const [analytics, setAnalytics] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const { isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
+  const [data, setData] = useState([]);
   const { quizId } = useParams();
 
-  useEffect(() => {
-    if (!isAuthenticated() || user?.role !== "ROLE_TEACHER") {
-      navigate("/login");
-      return;
-    }
-
-    fetchQuizAnalytics();
-  }, [isAuthenticated, user, navigate, quizId]);
-
-  const fetchQuizAnalytics = async () => {
+  // Fetch analytics (stable with useCallback)
+  const fetchQuizAnalytics = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await getQuizAnalytics(quizId);
-      setAnalytics(response.data);
+      const res = await getQuizAnalytics(quizId);
+      // console.log("Fetched analytics:", res.data);
+      setData(Array.isArray(res.data) ? res.data : []);
+      console.log("Fetched analytics:", data);
       setError("");
     } catch (err) {
       console.error("Error fetching quiz analytics:", err);
@@ -32,15 +27,24 @@ const QuizAnalytics = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [quizId]);
 
-  const getScoreColor = (percentage) => {
+  // Run on mount / when quizId changes
+  useEffect(() => {
+    if (!isAuthenticated() || user?.role !== "ROLE_TEACHER") {
+      navigate("/login");
+      return;
+    }
+    fetchQuizAnalytics();
+  }, [isAuthenticated, user, navigate, quizId, fetchQuizAnalytics]);
+
+  const getScoreColor = (percentage = 0) => {
     if (percentage >= 80) return "#28a745";
     if (percentage >= 60) return "#ffc107";
     return "#dc3545";
   };
 
-  const getGradeEmoji = (percentage) => {
+  const getGradeEmoji = (percentage = 0) => {
     if (percentage >= 90) return "🏆";
     if (percentage >= 80) return "🥇";
     if (percentage >= 70) return "🥈";
@@ -49,26 +53,31 @@ const QuizAnalytics = () => {
   };
 
   const calculateStats = () => {
-    if (!analytics?.attempts || analytics.attempts.length === 0) {
-      return { totalAttempts: 0, averageScore: 0, highestScore: 0, passRate: 0 };
+    if (!analytics?.attempts?.length) {
+      return {
+        totalAttempts: 0,
+        averageScore: 0,
+        highestScore: 0,
+        passRate: 0,
+      };
     }
+
+    console.log("Analytics values::", analytics);
 
     const attempts = analytics.attempts;
     const totalAttempts = attempts.length;
     const averageScore = Math.round(
-      attempts.reduce((sum, attempt) => sum + attempt.percentage, 0) / totalAttempts
+      attempts.reduce((sum, a) => sum + (a.percentage || 0), 0) / totalAttempts
     );
-    const highestScore = Math.max(...attempts.map(attempt => attempt.percentage));
+    const highestScore = Math.max(...attempts.map((a) => a.percentage || 0));
     const passRate = Math.round(
-      (attempts.filter(attempt => attempt.percentage >= 60).length / totalAttempts) * 100
+      (attempts.filter((a) => (a.percentage || 0) >= 60).length /
+        totalAttempts) *
+        100
     );
 
     return { totalAttempts, averageScore, highestScore, passRate };
   };
-
-  if (!isAuthenticated() || user?.role !== "ROLE_TEACHER") {
-    return null;
-  }
 
   if (loading) {
     return (
@@ -82,287 +91,283 @@ const QuizAnalytics = () => {
 
   return (
     <div style={{ padding: "2rem", maxWidth: "1200px", margin: "0 auto" }}>
-      <div style={{ 
-        display: "flex", 
-        justifyContent: "space-between", 
-        alignItems: "center", 
-        marginBottom: "2rem",
-        borderBottom: "2px solid #e9ecef",
-        paddingBottom: "1rem"
-      }}>
+      {/* Header */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "2rem",
+          borderBottom: "2px solid #e9ecef",
+          paddingBottom: "1rem",
+        }}
+      >
         <div>
           <h1 style={{ color: "#343a40", margin: 0 }}>Quiz Analytics</h1>
           {analytics?.quiz && (
-            <p style={{ color: "#6c757d", margin: "0.5rem 0 0 0", fontSize: "1.1rem" }}>
+            <p
+              style={{
+                color: "#6c757d",
+                margin: "0.5rem 0 0 0",
+                fontSize: "1.1rem",
+              }}
+            >
               {analytics.quiz.title} • Quiz ID: {analytics.quiz.id}
             </p>
           )}
         </div>
-        <button
-          onClick={() => navigate("/teacher-dashboard")}
-          style={{
-            padding: "0.75rem 1.5rem",
-            backgroundColor: "#6c757d",
-            color: "white",
-            border: "none",
-            borderRadius: "8px",
-            cursor: "pointer",
-            fontWeight: "500",
-            fontSize: "1rem"
-          }}
-        >
-          ← Back to Dashboard
-        </button>
+        <div style={{ display: "flex", gap: "0.5rem" }}>
+          <button
+            onClick={() => navigate(`/quiz-submissions/${quizId}`)}
+            style={{
+              padding: "0.75rem 1.5rem",
+              backgroundColor: "#007bff",
+              color: "white",
+              border: "none",
+              borderRadius: "8px",
+              cursor: "pointer",
+              fontWeight: "500",
+              fontSize: "1rem",
+            }}
+          >
+            View Submissions
+          </button>
+          <button
+            onClick={() => navigate("/teacher-dashboard")}
+            style={{
+              padding: "0.75rem 1.5rem",
+              backgroundColor: "#6c757d",
+              color: "white",
+              border: "none",
+              borderRadius: "8px",
+              cursor: "pointer",
+              fontWeight: "500",
+              fontSize: "1rem",
+            }}
+          >
+            ← Back to Dashboard
+          </button>
+        </div>
       </div>
 
+      {/* Error */}
       {error && (
-        <div style={{
-          padding: "1rem",
-          backgroundColor: "#f8d7da",
-          color: "#721c24",
-          border: "1px solid #f5c6cb",
-          borderRadius: "4px",
-          marginBottom: "1.5rem"
-        }}>
+        <div
+          style={{
+            padding: "1rem",
+            backgroundColor: "#f8d7da",
+            color: "#721c24",
+            border: "1px solid #f5c6cb",
+            borderRadius: "4px",
+            marginBottom: "1.5rem",
+          }}
+        >
           {error}
         </div>
       )}
 
-      {analytics?.quiz && (
-        <div style={{
-          backgroundColor: "#ffffff",
-          border: "1px solid #dee2e6",
-          borderRadius: "12px",
-          padding: "1.5rem",
-          marginBottom: "2rem",
-          boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
-        }}>
-          <h3 style={{ color: "#343a40", margin: "0 0 1rem 0" }}>Quiz Information</h3>
-          <div style={{ 
-            display: "grid", 
-            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-            gap: "1rem"
-          }}>
-            <div>
-              <p style={{ margin: "0.25rem 0", color: "#6c757d" }}>
-                <strong style={{ color: "#495057" }}>Category:</strong>
-                <span style={{
-                  backgroundColor: "#007bff",
-                  color: "white",
-                  padding: "0.25rem 0.5rem",
-                  borderRadius: "4px",
-                  fontSize: "0.875rem",
-                  marginLeft: "0.5rem"
-                }}>
-                  {analytics.quiz.categoryName}
-                </span>
-              </p>
-            </div>
-            <div>
-              <p style={{ margin: "0.25rem 0", color: "#6c757d" }}>
-                <strong style={{ color: "#495057" }}>Total Questions:</strong> {analytics.quiz.numQuestions}
-              </p>
-            </div>
-            <div>
-              <p style={{ margin: "0.25rem 0", color: "#6c757d" }}>
-                <strong style={{ color: "#495057" }}>Created:</strong> {new Date(analytics.quiz.createdDate).toLocaleDateString()}
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Stats Cards */}
-      <div style={{ 
-        display: "grid", 
-        gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-        gap: "1.5rem",
-        marginBottom: "2rem"
-      }}>
-        <div style={{
-          backgroundColor: "#ffffff",
-          border: "1px solid #dee2e6",
-          borderRadius: "12px",
-          padding: "1.5rem",
-          textAlign: "center",
-          boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
-        }}>
-          <div style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>👥</div>
-          <h3 style={{ color: "#007bff", margin: "0 0 0.5rem 0", fontSize: "2rem" }}>
-            {stats.totalAttempts}
-          </h3>
-          <p style={{ color: "#6c757d", margin: 0, fontWeight: "500" }}>
-            Total Attempts
-          </p>
-        </div>
-
-        <div style={{
-          backgroundColor: "#ffffff",
-          border: "1px solid #dee2e6",
-          borderRadius: "12px",
-          padding: "1.5rem",
-          textAlign: "center",
-          boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
-        }}>
-          <div style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>📊</div>
-          <h3 style={{ 
-            color: getScoreColor(stats.averageScore), 
-            margin: "0 0 0.5rem 0", 
-            fontSize: "2rem" 
-          }}>
-            {stats.averageScore}%
-          </h3>
-          <p style={{ color: "#6c757d", margin: 0, fontWeight: "500" }}>
-            Average Score
-          </p>
-        </div>
-
-        <div style={{
-          backgroundColor: "#ffffff",
-          border: "1px solid #dee2e6",
-          borderRadius: "12px",
-          padding: "1.5rem",
-          textAlign: "center",
-          boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
-        }}>
-          <div style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>🏆</div>
-          <h3 style={{ 
-            color: getScoreColor(stats.highestScore), 
-            margin: "0 0 0.5rem 0", 
-            fontSize: "2rem" 
-          }}>
-            {stats.highestScore}%
-          </h3>
-          <p style={{ color: "#6c757d", margin: 0, fontWeight: "500" }}>
-            Highest Score
-          </p>
-        </div>
-
-        <div style={{
-          backgroundColor: "#ffffff",
-          border: "1px solid #dee2e6",
-          borderRadius: "12px",
-          padding: "1.5rem",
-          textAlign: "center",
-          boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
-        }}>
-          <div style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>✅</div>
-          <h3 style={{ 
-            color: getScoreColor(stats.passRate), 
-            margin: "0 0 0.5rem 0", 
-            fontSize: "2rem" 
-          }}>
-            {stats.passRate}%
-          </h3>
-          <p style={{ color: "#6c757d", margin: 0, fontWeight: "500" }}>
-            Pass Rate (≥60%)
-          </p>
-        </div>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+          gap: "1.5rem",
+          marginBottom: "2rem",
+        }}
+      >
+        <StatCard
+          icon="👥"
+          value={stats.totalAttempts}
+          label="Total Attempts"
+        />
+        <StatCard
+          icon="📊"
+          value={`${stats.averageScore}%`}
+          label="Average Score"
+          color={getScoreColor(stats.averageScore)}
+        />
+        <StatCard
+          icon="🏆"
+          value={`${stats.highestScore}%`}
+          label="Highest Score"
+          color={getScoreColor(stats.highestScore)}
+        />
+        <StatCard
+          icon="✅"
+          value={`${stats.passRate}%`}
+          label="Pass Rate (≥60%)"
+          color={getScoreColor(stats.passRate)}
+        />
       </div>
 
-      <h2 style={{ color: "#343a40", marginBottom: "1.5rem" }}>Student Results</h2>
+      {/* Attempts Table */}
+      <h2 style={{ color: "#343a40", marginBottom: "1.5rem" }}>
+        Student Results
+      </h2>
 
-      {!analytics?.attempts || analytics.attempts.length === 0 ? (
-        <div style={{ 
-          textAlign: "center", 
-          padding: "3rem",
-          backgroundColor: "#f8f9fa",
-          borderRadius: "8px",
-          border: "2px dashed #dee2e6"
-        }}>
-          <h3 style={{ color: "#6c757d", marginBottom: "1rem" }}>No Attempts Yet</h3>
+      {!analytics?.attempts?.length ? (
+        <div
+          style={{
+            textAlign: "center",
+            padding: "3rem",
+            backgroundColor: "#f8f9fa",
+            borderRadius: "8px",
+            border: "2px dashed #dee2e6",
+          }}
+        >
+          <h3 style={{ color: "#6c757d", marginBottom: "1rem" }}>
+            No Attempts Yet
+          </h3>
           <p style={{ color: "#6c757d" }}>
-            No students have taken this quiz yet. Share the Quiz ID ({quizId}) with your students.
+            No students have taken this quiz yet. Share the Quiz ID ({quizId})
+            with your students.
           </p>
         </div>
       ) : (
-        <div style={{ 
-          backgroundColor: "#ffffff",
-          border: "1px solid #dee2e6",
-          borderRadius: "8px",
-          overflow: "hidden",
-          boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
-        }}>
-          <div style={{
-            backgroundColor: "#f8f9fa",
-            padding: "1rem",
-            borderBottom: "1px solid #dee2e6",
-            fontWeight: "600",
-            color: "#495057",
-            display: "grid",
-            gridTemplateColumns: "2fr 1fr 1fr 1fr 1fr",
-            gap: "1rem",
-            alignItems: "center"
-          }}>
-            <div>Student</div>
-            <div style={{ textAlign: "center" }}>Score</div>
-            <div style={{ textAlign: "center" }}>Percentage</div>
-            <div style={{ textAlign: "center" }}>Time Spent</div>
-            <div style={{ textAlign: "center" }}>Completed</div>
-          </div>
-
+        <div
+          style={{
+            backgroundColor: "#ffffff",
+            border: "1px solid #dee2e6",
+            borderRadius: "8px",
+            overflow: "hidden",
+            boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+          }}
+        >
+          <TableHeader />
           {analytics.attempts
-            .sort((a, b) => b.percentage - a.percentage)
+            .sort((a, b) => (b.percentage || 0) - (a.percentage || 0))
             .map((attempt, index) => (
-            <div
-              key={attempt.id}
-              style={{
-                padding: "1rem",
-                borderBottom: index < analytics.attempts.length - 1 ? "1px solid #e9ecef" : "none",
-                display: "grid",
-                gridTemplateColumns: "2fr 1fr 1fr 1fr 1fr",
-                gap: "1rem",
-                alignItems: "center",
-                backgroundColor: index % 2 === 0 ? "#ffffff" : "#f8f9fa"
-              }}
-            >
-              <div>
-                <div style={{ fontWeight: "600", color: "#343a40" }}>
-                  {attempt.studentName}
-                </div>
-                <div style={{ fontSize: "0.875rem", color: "#6c757d" }}>
-                  ID: {attempt.studentId}
-                </div>
-              </div>
-
-              <div style={{ textAlign: "center" }}>
-                <span style={{ fontWeight: "600", color: "#343a40" }}>
-                  {attempt.score}/{attempt.totalQuestions}
-                </span>
-              </div>
-
-              <div style={{ textAlign: "center" }}>
-                <div style={{ 
-                  display: "flex", 
-                  alignItems: "center", 
-                  justifyContent: "center",
-                  gap: "0.5rem"
-                }}>
-                  <span style={{ fontSize: "1.2rem" }}>
-                    {getGradeEmoji(attempt.percentage)}
-                  </span>
-                  <span style={{ 
-                    fontWeight: "bold",
-                    color: getScoreColor(attempt.percentage)
-                  }}>
-                    {attempt.percentage}%
-                  </span>
-                </div>
-              </div>
-
-              <div style={{ textAlign: "center", color: "#6c757d" }}>
-                {attempt.timeSpent}
-              </div>
-
-              <div style={{ textAlign: "center", fontSize: "0.875rem", color: "#6c757d" }}>
-                {new Date(attempt.submittedAt).toLocaleDateString()}
-                <br />
-                {new Date(attempt.submittedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-              </div>
-            </div>
-          ))}
+              <TableRow
+                key={attempt.submissionId || index}
+                attempt={attempt}
+                index={index}
+                total={analytics.attempts.length}
+                getGradeEmoji={getGradeEmoji}
+                getScoreColor={getScoreColor}
+              />
+            ))}
         </div>
       )}
+    </div>
+  );
+};
+
+/** Subcomponents to clean JSX */
+const StatCard = ({ icon, value, label, color = "#007bff" }) => (
+  <div
+    style={{
+      backgroundColor: "#ffffff",
+      border: "1px solid #dee2e6",
+      borderRadius: "12px",
+      padding: "1.5rem",
+      textAlign: "center",
+      boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+    }}
+  >
+    <div style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>{icon}</div>
+    <h3 style={{ color, margin: "0 0 0.5rem 0", fontSize: "2rem" }}>{value}</h3>
+    <p style={{ color: "#6c757d", margin: 0, fontWeight: "500" }}>{label}</p>
+  </div>
+);
+
+const TableHeader = () => (
+  <div
+    style={{
+      backgroundColor: "#f8f9fa",
+      padding: "1rem",
+      borderBottom: "1px solid #dee2e6",
+      fontWeight: "600",
+      color: "#495057",
+      display: "grid",
+      gridTemplateColumns: "2fr 1fr 1fr 1fr 1fr",
+      gap: "1rem",
+      alignItems: "center",
+    }}
+  >
+    <div>Student</div>
+    <div style={{ textAlign: "center" }}>Score</div>
+    <div style={{ textAlign: "center" }}>Percentage</div>
+    <div style={{ textAlign: "center" }}>Time Spent</div>
+    <div style={{ textAlign: "center" }}>Completed</div>
+  </div>
+);
+
+const TableRow = ({ attempt, index, total, getGradeEmoji, getScoreColor }) => {
+  const submittedDate = attempt.submittedAt
+    ? new Date(attempt.submittedAt)
+    : null;
+
+  return (
+    <div
+      style={{
+        padding: "1rem",
+        borderBottom: index < total - 1 ? "1px solid #e9ecef" : "none",
+        display: "grid",
+        gridTemplateColumns: "2fr 1fr 1fr 1fr 1fr",
+        gap: "1rem",
+        alignItems: "center",
+        backgroundColor: index % 2 === 0 ? "#ffffff" : "#f8f9fa",
+      }}
+    >
+      <div>
+        <div style={{ fontWeight: "600", color: "#343a40" }}>
+          {attempt.studentName || "Unknown"}
+        </div>
+        <div style={{ fontSize: "0.875rem", color: "#6c757d" }}>
+          ID: {attempt.studentId || "-"}
+        </div>
+      </div>
+
+      <div style={{ textAlign: "center" }}>
+        <span style={{ fontWeight: "600", color: "#343a40" }}>
+          {attempt.score}/{attempt.totalQuestions}
+        </span>
+      </div>
+
+      <div style={{ textAlign: "center" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "0.5rem",
+          }}
+        >
+          <span style={{ fontSize: "1.2rem" }}>
+            {getGradeEmoji(attempt.percentage)}
+          </span>
+          <span
+            style={{
+              fontWeight: "bold",
+              color: getScoreColor(attempt.percentage),
+            }}
+          >
+            {attempt.percentage}%
+          </span>
+        </div>
+      </div>
+
+      <div style={{ textAlign: "center", color: "#6c757d" }}>
+        {attempt.timeSpent || "-"}
+      </div>
+
+      <div
+        style={{
+          textAlign: "center",
+          fontSize: "0.875rem",
+          color: "#6c757d",
+        }}
+      >
+        {submittedDate
+          ? `${submittedDate.toLocaleDateString()} ${submittedDate.toLocaleTimeString(
+              [],
+              {
+                hour: "2-digit",
+                minute: "2-digit",
+              }
+            )}`
+          : "-"}
+      </div>
     </div>
   );
 };

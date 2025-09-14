@@ -13,6 +13,8 @@ import TeacherDashboard from "./pages/TeacherDashboard";
 import StudentDashboard from "./pages/StudentDashboard";
 import QuizAnalytics from "./pages/QuizAnalytics";
 import QuizResult from "./pages/QuizResult";
+import QuizSubmissions from "./pages/QuizSubmissions";
+import StudentResponse from "./pages/StudentResponse";
 import Header from "./components/Header";
 
 function App() {
@@ -25,7 +27,10 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/create-quiz" element={<CreateQuiz />} />
-          <Route path="/advanced-quiz-creator" element={<AdvancedQuizCreator />} />
+          <Route
+            path="/advanced-quiz-creator"
+            element={<AdvancedQuizCreator />}
+          />
           <Route path="/take-quiz" element={<TakeQuiz />} />
           <Route path="/submit-quiz/:id" element={<SubmitQuiz />} />
           <Route path="/add-question" element={<AddQuestion />} />
@@ -34,6 +39,14 @@ function App() {
           <Route path="/student-dashboard" element={<StudentDashboard />} />
           <Route path="/quiz-analytics/:quizId" element={<QuizAnalytics />} />
           <Route path="/quiz-result/:quizId" element={<QuizResult />} />
+          <Route
+            path="/quiz-submissions/:quizId"
+            element={<QuizSubmissions />}
+          />
+          <Route
+            path="/student-response/:submissionId"
+            element={<StudentResponse />}
+          />
         </Routes>
       </Router>
     </AuthProvider>

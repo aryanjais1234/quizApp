@@ -34,9 +34,22 @@ const Register = () => {
         navigate("/login");
       }, 2000);
     } catch (err) {
-      setError(
-        err.response?.data?.message || "Registration failed. Please try again."
-      );
+      console.log("Registration error:", err);
+      const res = err.response;
+      let message = "Registration failed. Please try again.";
+      if (res) {
+        if (typeof res.data === "string") {
+          // Backend returned a plain string error (e.g., 403: "User already exists")
+          message = res.data;
+        } else if (res.data?.message) {
+          message = res.data.message;
+        } else if (res.status === 403) {
+          message = "Forbidden";
+        }
+      } else if (err.message) {
+        message = err.message;
+      }
+      setError(message);
     } finally {
       setLoading(false);
     }

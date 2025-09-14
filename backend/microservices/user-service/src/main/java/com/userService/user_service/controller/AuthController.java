@@ -31,8 +31,14 @@ public class AuthController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    // Replace the register method in src/main/java/com/userService/user_service/controller/AuthController.java
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody User user) {
+        // \- Check if a user exists with same username and role
+        if (userRepository.existsByUsername(user.getUsername())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("User with the same username and try with different username");
+        }
+
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         try {
             userRepository.save(user);
@@ -73,6 +79,15 @@ public class AuthController {
     public ResponseEntity<String> getRoleFromToken(@RequestParam("token") String token) {
         String role = jwtUtil.extractRole(token); // Implement extractRole in JwtUtil
         return ResponseEntity.ok(role);
+    }
+
+    @GetMapping("/username/{userName}")
+    public ResponseEntity<Integer> getUserId(@PathVariable String userName){
+        User user = userRepository.findByUsername(userName).orElse(null);
+        if(user == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(-1);
+        }
+        return ResponseEntity.ok(user.getId());
     }
 }
 

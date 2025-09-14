@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Base API configuration matching backend gateway
 const API_BASE = "http://localhost:8765";
-const quizBase = `${API_BASE}/quiz/`;
+const quizBase = `${API_BASE}/quiz`;
 const questionBase = `${API_BASE}/question`;
 const authBase = `${API_BASE}/auth`;
 
@@ -20,6 +20,18 @@ apiClient.interceptors.request.use(
     const token = localStorage.getItem('token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+    }
+    // Pass username for services expecting @RequestHeader("username")
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      try {
+        const user = JSON.parse(userStr);
+        if (user?.username) {
+          config.headers['username'] = user.username;
+        }
+      } catch (_) {
+        // ignore malformed user in storage
+      }
     }
     return config;
   },
@@ -41,14 +53,9 @@ export const getRoleFromToken = (token) =>
 
 // Quiz APIs - matching backend endpoints
 export const createQuiz = (data) => {
-  // Backend expects query parameters: category, numQ, title
-  return apiClient.post(`${quizBase}/create`, null, {
-    params: {
-      category: data.categoryName,
-      numQ: data.numQuestions,
-      title: data.title
-    }
-  });
+  // Backend expects JSON body: { categoryName, numQuestions, title }
+  console.log("🔻 Creating Quiz with data:", data);
+  return apiClient.post(`${quizBase}/create`, data);
 };
 
 export const getQuizQuestions = (id) => 
@@ -103,5 +110,15 @@ export const getQuizAnalytics = (quizId) =>
 export const getStudentQuizHistory = () => 
   apiClient.get(`${quizBase}/student/history`);
 
-export const getQuizResultDetails = (quizId) => 
-  apiClient.get(`${quizBase}/student/result/${quizId}`);
+export const getQuizResultDetails = (responseId) => 
+  apiClient.get(`${quizBase}/student/result/${responseId}`);
+
+// Submissions APIs (teacher views students' attempts)
+// If your backend exposes different paths, adjust these endpoints accordingly.
+export const getQuizSubmissions = (quizId) =>
+  apiClient.get(`${quizBase}/analytics/${quizId}`);
+
+export const getSubmissionById = (quizId) =>
+  apiClient.get(`${quizBase}/analytics/${quizId}`);
+
+
