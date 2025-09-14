@@ -35,6 +35,10 @@ export const login = (credentials) =>
 export const register = (userData) => 
   axios.post(`${authBase}/register`, userData);
 
+// Auth utility: get role from token
+export const getRoleFromToken = (token) =>
+  axios.get(`${authBase}/role`, { params: { token } });
+
 // Quiz APIs - matching backend endpoints
 export const createQuiz = (data) => {
   // Backend expects: { categoryName, numQuestions, title }

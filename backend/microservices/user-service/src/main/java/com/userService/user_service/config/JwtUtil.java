@@ -65,6 +65,11 @@ public class JwtUtil {
                 .get("role", String.class);
     }
 
+//    public String extractRole(String token) {
+//        Claims claims = extractAllClaims(token);
+//        return claims.get("role", String.class);
+//    }
+
     private SecretKey getKey() {
         byte[] keyBytes = Decoders.BASE64.decode(Base64.getEncoder().encodeToString(secretKey.getBytes()));
         return Keys.hmacShaKeyFor(keyBytes);

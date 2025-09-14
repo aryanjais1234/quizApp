@@ -68,5 +68,11 @@ public class AuthController {
         jwtUtil.validateToken(token);
         return "Valid";
     }
+
+    @GetMapping("/role")
+    public ResponseEntity<String> getRoleFromToken(@RequestParam("token") String token) {
+        String role = jwtUtil.extractRole(token); // Implement extractRole in JwtUtil
+        return ResponseEntity.ok(role);
+    }
 }
 
