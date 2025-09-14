@@ -85,3 +85,17 @@ export const getQuestionsByIds = (ids) =>
 
 export const getScore = (responses) => 
   apiClient.post(`${questionBase}/getScore`, responses);
+
+// Teacher Dashboard APIs
+export const getTeacherQuizzes = () => 
+  apiClient.get(`${quizBase}/teacher/quizzes`);
+
+export const getQuizAnalytics = (quizId) => 
+  apiClient.get(`${quizBase}/analytics/${quizId}`);
+
+// Student Dashboard APIs
+export const getStudentQuizHistory = () => 
+  apiClient.get(`${quizBase}/student/history`);
+
+export const getQuizResultDetails = (quizId) => 
+  apiClient.get(`${quizBase}/student/result/${quizId}`);

@@ -178,7 +178,11 @@ const AddQuestion = () => {
           </button>
         </form>
 
-        {msg && <p className="message">{msg}</p>}
+        {msg && (
+          <p className={`message ${msg.includes("✅") ? "success" : "error"}`}>
+            {msg}
+          </p>
+        )}
       </div>
     </div>
   );
