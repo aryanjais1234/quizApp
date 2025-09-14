@@ -19,6 +19,16 @@ const TeacherDashboard = () => {
     fetchTeacherQuizzes();
   }, [isAuthenticated, user, navigate]);
 
+  const formatDate = (dateString) => {
+    if (!dateString) return "Unknown";
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString();
+    } catch (error) {
+      return dateString; // Return as-is if parsing fails
+    }
+  };
+
   const fetchTeacherQuizzes = async () => {
     try {
       setLoading(true);
@@ -28,25 +38,6 @@ const TeacherDashboard = () => {
     } catch (err) {
       console.error("Error fetching teacher quizzes:", err);
       setError("Failed to load your quizzes. Please try again.");
-      // For now, using mock data since backend endpoint doesn't exist yet
-      setQuizzes([
-        {
-          id: 1,
-          title: "Java Basics Quiz",
-          categoryName: "Java",
-          numQuestions: 5,
-          createdDate: "2024-01-15",
-          attemptCount: 12
-        },
-        {
-          id: 2,
-          title: "Python Fundamentals",
-          categoryName: "Python", 
-          numQuestions: 8,
-          createdDate: "2024-01-20",
-          attemptCount: 8
-        }
-      ]);
     } finally {
       setLoading(false);
     }
@@ -208,7 +199,7 @@ const TeacherDashboard = () => {
                   <span style={{ fontWeight: "500", color: "#495057" }}>Questions:</span> {quiz.numQuestions}
                 </p>
                 <p style={{ margin: "0.5rem 0", color: "#6c757d" }}>
-                  <span style={{ fontWeight: "500", color: "#495057" }}>Created:</span> {quiz.createdDate}
+                  <span style={{ fontWeight: "500", color: "#495057" }}>Created:</span> {formatDate(quiz.createdDate)}
                 </p>
                 <p style={{ margin: "0.5rem 0", color: "#6c757d" }}>
                   <span style={{ fontWeight: "500", color: "#495057" }}>Student Attempts:</span> 
