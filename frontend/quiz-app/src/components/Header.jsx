@@ -12,17 +12,19 @@ const Header = () => {
     <nav
       style={{
         padding: "1rem",
-        background: "#282c34",
-        color: "white",
+        background: "#ffffff",
+        color: "#213547",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
+        boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+        borderBottom: "1px solid #e9ecef",
       }}
     >
       <div>
         <Link
           to="/"
-          style={{ marginRight: 15, color: "white", textDecoration: "none" }}
+          style={{ marginRight: 15, color: "#007bff", textDecoration: "none", fontWeight: "500" }}
         >
           Home
         </Link>
@@ -33,41 +35,56 @@ const Header = () => {
               to="/create-quiz"
               style={{
                 marginRight: 15,
-                color: "white",
+                color: "#007bff",
                 textDecoration: "none",
+                fontWeight: "500",
               }}
             >
-              Create Quiz
+              Quick Quiz
+            </Link>
+            <Link
+              to="/advanced-quiz-creator"
+              style={{
+                marginRight: 15,
+                color: "#007bff",
+                textDecoration: "none",
+                fontWeight: "500",
+              }}
+            >
+              Custom Quiz
             </Link>
             <Link
               to="/add-question"
               style={{
                 marginRight: 15,
-                color: "white",
+                color: "#007bff",
                 textDecoration: "none",
+                fontWeight: "500",
               }}
             >
               Add Question
             </Link>
             <Link
-              to="/questions"
+              to="/view-questions"
               style={{
                 marginRight: 15,
-                color: "white",
+                color: "#007bff",
                 textDecoration: "none",
+                fontWeight: "500",
               }}
             >
-              View All Questions
+              View Questions
             </Link>
             <Link
-              to="/quizzes"
+              to="/teacher-dashboard"
               style={{
                 marginRight: 15,
-                color: "white",
+                color: "#007bff",
                 textDecoration: "none",
+                fontWeight: "500",
               }}
             >
-              View Quiz
+              My Quizzes
             </Link>
           </>
         )}
@@ -78,21 +95,23 @@ const Header = () => {
               to="/take-quiz"
               style={{
                 marginRight: 15,
-                color: "white",
+                color: "#007bff",
                 textDecoration: "none",
+                fontWeight: "500",
               }}
             >
               Take Quiz
             </Link>
             <Link
-              to="/quizzes"
+              to="/student-dashboard"
               style={{
                 marginRight: 15,
-                color: "white",
+                color: "#007bff",
                 textDecoration: "none",
+                fontWeight: "500",
               }}
             >
-              View Quiz
+              My Dashboard
             </Link>
           </>
         )}
@@ -101,7 +120,7 @@ const Header = () => {
       <div>
         {isAuthenticated() ? (
           <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
-            <span>Welcome, {user?.username}</span>
+            <span style={{ color: "#495057", fontWeight: "500" }}>Welcome, {user?.username}</span>
             <button
               onClick={handleLogout}
               style={{
@@ -111,6 +130,7 @@ const Header = () => {
                 border: "none",
                 borderRadius: "4px",
                 cursor: "pointer",
+                fontWeight: "500",
               }}
             >
               Logout
@@ -122,15 +142,16 @@ const Header = () => {
               to="/login"
               style={{
                 marginRight: 15,
-                color: "white",
+                color: "#007bff",
                 textDecoration: "none",
+                fontWeight: "500",
               }}
             >
               Login
             </Link>
             <Link
               to="/register"
-              style={{ color: "white", textDecoration: "none" }}
+              style={{ color: "#007bff", textDecoration: "none", fontWeight: "500" }}
             >
               Register
             </Link>

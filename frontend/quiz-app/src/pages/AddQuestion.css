@@ -1,6 +1,6 @@
 /* AddQuestion.css */
 .container {
-  background: linear-gradient(to right, #667eea, #764ba2);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -9,12 +9,13 @@
 }
 
 /* AddQuestion.css */
-.center-container {
+.centre-container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: #f7f7f7;
+  background: #f8f9fa;
+  padding: 2rem;
 }
 
 
@@ -33,38 +34,63 @@
   color: #333;
 }
 
-.form-box input {
+.form-box input,
+.form-box select {
   width: 100%;
   padding: 0.75rem 1rem;
   margin-bottom: 1rem;
-  border: 1px solid #ccc;
+  border: 1px solid #ced4da;
   border-radius: 8px;
   font-size: 1rem;
+  background-color: #ffffff;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
-.form-box input:focus {
-  border-color: #667eea;
+.form-box input:focus,
+.form-box select:focus {
+  border-color: #007bff;
   outline: none;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
 .form-box button {
   width: 100%;
   padding: 0.75rem;
-  background-color: #667eea;
+  background-color: #007bff;
   color: white;
   font-weight: bold;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  font-size: 1rem;
 }
 
 .form-box button:hover {
-  background-color: #5a67d8;
+  background-color: #0056b3;
+}
+
+.form-box button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
 }
 
 .message {
   text-align: center;
-  color: green;
   margin-top: 1rem;
+  padding: 0.75rem;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.message.success {
+  color: #155724;
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+}
+
+.message.error {
+  color: #721c24;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
 }
