@@ -24,7 +24,7 @@ const TeacherDashboard = () => {
     try {
       const date = new Date(dateString);
       return date.toLocaleDateString();
-    } catch (error) {
+    } catch (_error) {
       return dateString; // Return as-is if parsing fails
     }
   };
