@@ -28,42 +28,6 @@ const StudentDashboard = () => {
     } catch (err) {
       console.error("Error fetching quiz history:", err);
       setError("Failed to load your quiz history. Please try again.");
-      // For now, using mock data since backend endpoint doesn't exist yet
-      setQuizHistory([
-        {
-          id: 1,
-          quizId: 101,
-          title: "Java Basics Quiz",
-          category: "Java",
-          score: 8,
-          totalQuestions: 10,
-          dateTaken: "2024-01-20",
-          timeSpent: "15 minutes",
-          status: "completed"
-        },
-        {
-          id: 2,
-          quizId: 102,
-          title: "Python Fundamentals",
-          category: "Python",
-          score: 6,
-          totalQuestions: 8,
-          dateTaken: "2024-01-22",
-          timeSpent: "12 minutes",
-          status: "completed"
-        },
-        {
-          id: 3,
-          quizId: 103,
-          title: "JavaScript Advanced",
-          category: "JavaScript",
-          score: 9,
-          totalQuestions: 12,
-          dateTaken: "2024-01-25",
-          timeSpent: "18 minutes",
-          status: "completed"
-        }
-      ]);
     } finally {
       setLoading(false);
     }
@@ -71,6 +35,16 @@ const StudentDashboard = () => {
 
   const getScorePercentage = (score, total) => {
     return Math.round((score / total) * 100);
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return "Unknown";
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString();
+    } catch (_error) {
+      return dateString; // Return as-is if parsing fails
+    }
   };
 
   const getScoreColor = (percentage) => {
@@ -332,7 +306,7 @@ const StudentDashboard = () => {
                   color: "#6c757d",
                   fontSize: "0.875rem"
                 }}>
-                  <span>📅 {quiz.dateTaken}</span>
+                  <span>📅 {formatDate(quiz.dateTaken)}</span>
                   <span>⏱️ {quiz.timeSpent}</span>
                   <span style={{ 
                     color: "#007bff",

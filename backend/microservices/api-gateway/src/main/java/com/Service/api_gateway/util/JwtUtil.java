@@ -45,6 +45,17 @@ public class JwtUtil {
         return claims.get("role", String.class);
     }
 
+    public String extractUsername(String token) {
+        Claims claims = Jwts
+                .parserBuilder()
+                .setSigningKey(getKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        return claims.getSubject(); // Username is stored as subject
+    }
+
 
 }
 

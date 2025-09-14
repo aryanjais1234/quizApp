@@ -316,7 +316,10 @@ const AdvancedQuizCreator = () => {
                       <input
                         type="checkbox"
                         checked={!!isSelected}
-                        onChange={() => handleQuestionToggle(question)}
+                        onChange={(e) => {
+                          e.stopPropagation();
+                          handleQuestionToggle(question);
+                        }}
                         style={{
                           width: "20px",
                           height: "20px",
