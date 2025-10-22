@@ -1,0 +1,111 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: aryan
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./init-db:/docker-entrypoint-initdb.d   # <-- Add this
+    ports:
+      - "5432:5432"
+    networks:
+      - microservices-net
+
+  service-registry:
+    build: ./service-registry
+    container_name: service-registry
+    environment:
+      SERVER_PORT: 8761
+    ports:
+      - "8761:8761"
+    networks:
+      - microservices-net
+    
+  service-1:
+    build: ./questionService
+    container_name: questionService
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db:5432/questiondb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: aryan
+      SERVER_PORT: 8086
+      SPRING_APPLICATION_NAME: question-service
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-registry:8761/eureka/
+    depends_on:
+      - db
+    ports:
+      - "8086:8086"
+    networks:
+      - microservices-net
+
+  service-2:
+    build: ./quizService
+    container_name: quizService
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db:5432/quizdb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: aryan
+      SERVER_PORT: 8081
+      SPRING_APPLICATION_NAME: quiz-service
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-registry:8761/eureka/
+    depends_on:
+      - db
+    ports:
+      - "8081:8081"
+    networks:
+      - microservices-net
+
+  service-3:
+    build: ./user-service
+    container_name: user-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db:5432/userdb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: aryan
+      SERVER_PORT: 8091
+      SPRING_APPLICATION_NAME: user-service
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-registry:8761/eureka/
+    depends_on:
+      - db
+    ports:
+      - "8091:8091"
+    networks:
+      - microservices-net
+
+  api-gateway:
+    build: ./api-gateway
+    container_name: api-gateway
+    environment:
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://host.docker.internal:5432/quizDB
+#      SPRING_DATASOURCE_USERNAME: postgres
+#      SPRING_DATASOURCE_PASSWORD: aryan
+      SERVER_PORT: 8765
+      SPRING_APPLICATION_NAME: api-gateway
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-registry:8761/eureka/
+    #    depends_on:
+    #      - postgres
+    ports:
+      - "8765:8765"
+    networks:
+      - microservices-net
+
+#  frontend:
+#    build: ./frontend
+#    container_name: frontend
+#    ports:
+#      - "3000:80"
+#    depends_on:
+#      - service-1
+#      - service-2
+#    networks:
+#      - microservices-net
+
+networks:
+  microservices-net:
+
+volumes:
+  pgdata:

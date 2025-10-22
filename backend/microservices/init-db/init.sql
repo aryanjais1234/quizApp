@@ -1,0 +1,4 @@
+-- init.sql
+CREATE DATABASE questionDB;
+CREATE DATABASE quizDB;
+CREATE DATABASE userDB;

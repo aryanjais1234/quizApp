@@ -7,16 +7,14 @@ spring:
 
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://127.0.0.1:5432/quizDB
+    url: jdbc:postgresql://postgres-db:5432/quizdb
     username: postgres
     password: aryan
 
   jpa:
     hibernate:
       ddl-auto: update
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
 
 eureka:
   client:
