@@ -4,18 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="eeb1c188-7003-4e9d-9b56-3d3d31c29d89" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/copilot.data.migration.agent.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/copilot.data.migration.edit.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/microservices.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/questionService/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/questionService/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/quizService/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/quizService/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/resources/application.yml" afterDir="false" />
-    </list>
+    <list default="true" id="eeb1c188-7003-4e9d-9b56-3d3d31c29d89" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -215,7 +204,7 @@
       <workItem from="1759777553438" duration="383000" />
       <workItem from="1759860339418" duration="23000" />
       <workItem from="1761117525458" duration="10881000" />
-      <workItem from="1761130347796" duration="4539000" />
+      <workItem from="1761130347796" duration="4684000" />
     </task>
     <servers />
   </component>
