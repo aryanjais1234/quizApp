@@ -25,6 +25,7 @@ class VectorStore:
         if self._client is None:
             self._client = chromadb.PersistentClient(
                 path=settings.chroma_persist_dir,
+                settings=chromadb.Settings(anonymized_telemetry=False),
             )
         return self._client
 
