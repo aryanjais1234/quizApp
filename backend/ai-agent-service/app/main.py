@@ -1,3 +1,7 @@
+from dotenv import load_dotenv
+
+load_dotenv()  # load .env into os.environ before any module initialises
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 

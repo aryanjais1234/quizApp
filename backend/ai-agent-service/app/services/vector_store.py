@@ -1,6 +1,3 @@
-import os
-os.environ["ANONYMIZED_TELEMETRY"] = "False"
-
 from typing import Any, Dict, List, Optional
 
 import chromadb
@@ -25,6 +22,9 @@ class VectorStore:
         if self._client is None:
             self._client = chromadb.PersistentClient(
                 path=settings.chroma_persist_dir,
+                settings=chromadb.Settings(
+                    anonymized_telemetry=settings.anonymized_telemetry
+                ),
             )
         return self._client
 
