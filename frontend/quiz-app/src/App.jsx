@@ -17,7 +17,7 @@ import QuizSubmissions from "./pages/QuizSubmissions";
 import StudentResponse from "./pages/StudentResponse";
 import UploadMaterial from "./pages/UploadMaterial";
 import TeacherMaterials from "./pages/TeacherMaterials";
-import Header from "./components/Header";
+import Header from "./components/layout/Header";
 
 function App() {
   return (

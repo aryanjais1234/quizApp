@@ -1,341 +1,219 @@
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import styles from "./Home.module.scss";
+
+const DashboardCard = ({ icon, iconColor = "purple", title, description, onClick, variant }) => (
+  <div
+    className={`${styles["home__card"]} ${variant ? styles[`home__card--${variant}`] : ""}`}
+    onClick={onClick}
+    role="button"
+    tabIndex={0}
+    onKeyDown={(e) => e.key === "Enter" && onClick()}
+  >
+    <div className={`${styles["home__card-icon"]} ${styles[`home__card-icon--${iconColor}`]}`}>
+      {icon}
+    </div>
+    <h3 className={styles["home__card-title"]}>{title}</h3>
+    <p className={styles["home__card-desc"]}>{description}</p>
+    <span className={styles["home__card-arrow"]}>→</span>
+  </div>
+);
 
 const Home = () => {
   const { isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
 
+  const teacherCards = [
+    {
+      icon: "📊",
+      iconColor: "purple",
+      title: "My Quizzes",
+      description: "View and manage all your created quizzes",
+      path: "/teacher-dashboard",
+    },
+    {
+      icon: "⚡",
+      iconColor: "blue",
+      title: "Quick Create",
+      description: "Create a quiz instantly with random questions",
+      path: "/create-quiz",
+    },
+    {
+      icon: "🎯",
+      iconColor: "orange",
+      title: "Custom Quiz",
+      description: "Hand-pick specific questions for your quiz",
+      path: "/advanced-quiz-creator",
+    },
+    {
+      icon: "📝",
+      iconColor: "green",
+      title: "Question Bank",
+      description: "Browse and manage all your questions",
+      path: "/view-questions",
+    },
+    {
+      icon: "✏️",
+      iconColor: "blue",
+      title: "Add Question",
+      description: "Create new questions for your question bank",
+      path: "/add-question",
+    },
+    {
+      icon: "📚",
+      iconColor: "teal",
+      title: "My Materials",
+      description: "Browse and manage your lecture materials",
+      path: "/teacher-materials",
+      variant: "materials",
+    },
+    {
+      icon: "⬆️",
+      iconColor: "green",
+      title: "Upload Material",
+      description: "Share lecture notes, PDFs, or transcripts",
+      path: "/upload-material",
+      variant: "materials",
+    },
+  ];
+
+  const studentCards = [
+    {
+      icon: "📊",
+      iconColor: "purple",
+      title: "My Dashboard",
+      description: "View your quiz history and progress",
+      path: "/student-dashboard",
+    },
+    {
+      icon: "🎯",
+      iconColor: "blue",
+      title: "Take Quiz",
+      description: "Start a new quiz challenge",
+      path: "/take-quiz",
+    },
+  ];
+
+  const activeCards = user?.role === "ROLE_TEACHER" ? teacherCards : studentCards;
+
   return (
-    <div style={{ 
-      padding: "2rem", 
-      maxWidth: "1200px", 
-      margin: "0 auto",
-      textAlign: "center"
-    }}>
-      <div style={{ 
-        marginBottom: "3rem",
-        padding: "3rem 2rem",
-        background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-        borderRadius: "16px",
-        color: "white"
-      }}>
-        <h1 style={{ 
-          fontSize: "3rem", 
-          margin: "0 0 1rem 0",
-          fontWeight: "700"
-        }}>
-          🎓 Quiz Platform
-        </h1>
-        <p style={{ 
-          fontSize: "1.25rem", 
-          margin: "0 0 2rem 0",
-          opacity: "0.9"
-        }}>
-          Create engaging quizzes, track progress, and enhance learning experiences
-        </p>
-        
-        {!isAuthenticated() && (
-          <div style={{ display: "flex", gap: "1rem", justifyContent: "center" }}>
-            <button
-              onClick={() => navigate("/login")}
-              style={{
-                padding: "0.75rem 2rem",
-                backgroundColor: "white",
-                color: "#667eea",
-                border: "none",
-                borderRadius: "8px",
-                cursor: "pointer",
-                fontWeight: "600",
-                fontSize: "1.1rem"
-              }}
-            >
-              Get Started
-            </button>
-            <button
-              onClick={() => navigate("/register")}
-              style={{
-                padding: "0.75rem 2rem",
-                backgroundColor: "transparent",
-                color: "white",
-                border: "2px solid white",
-                borderRadius: "8px",
-                cursor: "pointer",
-                fontWeight: "600",
-                fontSize: "1.1rem"
-              }}
-            >
-              Sign Up
-            </button>
-          </div>
-        )}
+    <div className={styles["page-home"]}>
+      {/* Hero Section */}
+      <div className={styles["home__hero"]}>
+        <div className={styles["home__hero-inner"]}>
+          {!isAuthenticated() && (
+            <div className={styles["home__hero-badge"]}>
+              ✨ Modern Quiz Platform
+            </div>
+          )}
+          <h1 className={styles["home__hero-title"]}>
+            {isAuthenticated()
+              ? `Welcome back, ${user?.username}! 👋`
+              : "Create. Learn. Excel."}
+          </h1>
+          <p className={styles["home__hero-subtitle"]}>
+            {isAuthenticated()
+              ? user?.role === "ROLE_TEACHER"
+                ? "Manage your quizzes, question bank, and learning materials from one place."
+                : "Track your progress, take quizzes, and improve your skills."
+              : "A powerful platform for teachers to create engaging quizzes and for students to learn effectively."}
+          </p>
+          {!isAuthenticated() && (
+            <div className={styles["home__hero-actions"]}>
+              <button
+                className={`${styles["home__hero-btn"]} ${styles["home__hero-btn--primary"]}`}
+                onClick={() => navigate("/login")}
+              >
+                Get Started →
+              </button>
+              <button
+                className={`${styles["home__hero-btn"]} ${styles["home__hero-btn--outline"]}`}
+                onClick={() => navigate("/register")}
+              >
+                Create Account
+              </button>
+            </div>
+          )}
+        </div>
       </div>
 
+      {/* Authenticated Dashboard */}
       {isAuthenticated() && (
         <div>
-          <h2 style={{ 
-            color: "#343a40", 
-            marginBottom: "2rem",
-            fontSize: "2rem"
-          }}>
-            Welcome back, {user?.username}! 👋
-          </h2>
-
           {user?.role === "ROLE_TEACHER" ? (
-            <div style={{ 
-              display: "grid", 
-              gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-              gap: "2rem",
-              marginBottom: "3rem"
-            }}>
-              <div
-                onClick={() => navigate("/teacher-dashboard")}
-                style={{
-                  backgroundColor: "#ffffff",
-                  border: "1px solid #dee2e6",
-                  borderRadius: "12px",
-                  padding: "2rem",
-                  cursor: "pointer",
-                  transition: "all 0.3s ease",
-                  boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-4px)";
-                  e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.15)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)";
-                }}
-              >
-                <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>📊</div>
-                <h3 style={{ color: "#343a40", margin: "0 0 0.5rem 0" }}>My Quizzes</h3>
-                <p style={{ color: "#6c757d", margin: 0 }}>
-                  View and manage all your created quizzes
-                </p>
+            <>
+              <div className={styles["home__section"]}>
+                <h2 className={styles["home__section-title"]}>📋 Quiz Management</h2>
+                <div className={styles["home__grid"]}>
+                  {teacherCards.slice(0, 5).map((card) => (
+                    <DashboardCard
+                      key={card.path}
+                      {...card}
+                      onClick={() => navigate(card.path)}
+                    />
+                  ))}
+                </div>
               </div>
 
-              <div
-                onClick={() => navigate("/create-quiz")}
-                style={{
-                  backgroundColor: "#ffffff",
-                  border: "1px solid #dee2e6",
-                  borderRadius: "12px",
-                  padding: "2rem",
-                  cursor: "pointer",
-                  transition: "all 0.3s ease",
-                  boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-4px)";
-                  e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.15)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)";
-                }}
-              >
-                <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>➕</div>
-                <h3 style={{ color: "#343a40", margin: "0 0 0.5rem 0" }}>Quick Create</h3>
-                <p style={{ color: "#6c757d", margin: 0 }}>
-                  Create a quiz with random questions
-                </p>
+              <div className={styles["home__section"]}>
+                <h2 className={styles["home__section-title"]}>📚 Learning Materials</h2>
+                <div className={styles["home__grid"]}>
+                  {teacherCards.slice(5).map((card) => (
+                    <DashboardCard
+                      key={card.path}
+                      {...card}
+                      onClick={() => navigate(card.path)}
+                    />
+                  ))}
+                </div>
               </div>
-
-              <div
-                onClick={() => navigate("/advanced-quiz-creator")}
-                style={{
-                  backgroundColor: "#ffffff",
-                  border: "1px solid #dee2e6",
-                  borderRadius: "12px",
-                  padding: "2rem",
-                  cursor: "pointer",
-                  transition: "all 0.3s ease",
-                  boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-4px)";
-                  e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.15)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)";
-                }}
-              >
-                <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>🎯</div>
-                <h3 style={{ color: "#343a40", margin: "0 0 0.5rem 0" }}>Custom Quiz</h3>
-                <p style={{ color: "#6c757d", margin: 0 }}>
-                  Choose specific questions for your quiz
-                </p>
-              </div>
-
-              <div
-                onClick={() => navigate("/view-questions")}
-                style={{
-                  backgroundColor: "#ffffff",
-                  border: "1px solid #dee2e6",
-                  borderRadius: "12px",
-                  padding: "2rem",
-                  cursor: "pointer",
-                  transition: "all 0.3s ease",
-                  boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-4px)";
-                  e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.15)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)";
-                }}
-              >
-                <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>📝</div>
-                <h3 style={{ color: "#343a40", margin: "0 0 0.5rem 0" }}>Question Bank</h3>
-                <p style={{ color: "#6c757d", margin: 0 }}>
-                  Browse and manage all questions
-                </p>
-              </div>
-
-              <div
-                onClick={() => navigate("/add-question")}
-                style={{
-                  backgroundColor: "#ffffff",
-                  border: "1px solid #dee2e6",
-                  borderRadius: "12px",
-                  padding: "2rem",
-                  cursor: "pointer",
-                  transition: "all 0.3s ease",
-                  boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-4px)";
-                  e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.15)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)";
-                }}
-              >
-                <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>✏️</div>
-                <h3 style={{ color: "#343a40", margin: "0 0 0.5rem 0" }}>Add Question</h3>
-                <p style={{ color: "#6c757d", margin: 0 }}>
-                  Create new questions for quizzes
-                </p>
-              </div>
-            </div>
+            </>
           ) : (
-            <div style={{ 
-              display: "grid", 
-              gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-              gap: "2rem",
-              marginBottom: "3rem"
-            }}>
-              <div
-                onClick={() => navigate("/student-dashboard")}
-                style={{
-                  backgroundColor: "#ffffff",
-                  border: "1px solid #dee2e6",
-                  borderRadius: "12px",
-                  padding: "2rem",
-                  cursor: "pointer",
-                  transition: "all 0.3s ease",
-                  boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-4px)";
-                  e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.15)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)";
-                }}
-              >
-                <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>📊</div>
-                <h3 style={{ color: "#343a40", margin: "0 0 0.5rem 0" }}>My Dashboard</h3>
-                <p style={{ color: "#6c757d", margin: 0 }}>
-                  View your quiz history and progress
-                </p>
-              </div>
-
-              <div
-                onClick={() => navigate("/take-quiz")}
-                style={{
-                  backgroundColor: "#ffffff",
-                  border: "1px solid #dee2e6",
-                  borderRadius: "12px",
-                  padding: "2rem",
-                  cursor: "pointer",
-                  transition: "all 0.3s ease",
-                  boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-4px)";
-                  e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.15)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)";
-                }}
-              >
-                <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>🎯</div>
-                <h3 style={{ color: "#343a40", margin: "0 0 0.5rem 0" }}>Take Quiz</h3>
-                <p style={{ color: "#6c757d", margin: 0 }}>
-                  Start a new quiz challenge
-                </p>
+            <div className={styles["home__section"]}>
+              <h2 className={styles["home__section-title"]}>🚀 Quick Access</h2>
+              <div className={styles["home__grid"]}>
+                {activeCards.map((card) => (
+                  <DashboardCard
+                    key={card.path}
+                    {...card}
+                    onClick={() => navigate(card.path)}
+                  />
+                ))}
               </div>
             </div>
           )}
         </div>
       )}
 
+      {/* Unauthenticated Features */}
       {!isAuthenticated() && (
-        <div style={{ 
-          display: "grid", 
-          gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-          gap: "2rem",
-          marginTop: "3rem"
-        }}>
-          <div style={{
-            backgroundColor: "#ffffff",
-            border: "1px solid #dee2e6",
-            borderRadius: "12px",
-            padding: "2rem",
-            textAlign: "center",
-            boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
-          }}>
-            <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>👨‍🏫</div>
-            <h3 style={{ color: "#343a40", margin: "0 0 0.5rem 0" }}>For Teachers</h3>
-            <p style={{ color: "#6c757d", margin: 0 }}>
-              Create quizzes, manage questions, and track student progress
+        <div className={styles["home__features"]}>
+          <div className={styles["home__feature"]}>
+            <div className={styles["home__feature-icon"]}>👨‍🏫</div>
+            <h3 className={styles["home__feature-title"]}>For Teachers</h3>
+            <p className={styles["home__feature-desc"]}>
+              Create quizzes, manage a question bank, upload lecture materials, and track student progress — all in one place.
             </p>
           </div>
-
-          <div style={{
-            backgroundColor: "#ffffff",
-            border: "1px solid #dee2e6",
-            borderRadius: "12px",
-            padding: "2rem",
-            textAlign: "center",
-            boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
-          }}>
-            <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>👨‍🎓</div>
-            <h3 style={{ color: "#343a40", margin: "0 0 0.5rem 0" }}>For Students</h3>
-            <p style={{ color: "#6c757d", margin: 0 }}>
-              Take quizzes, track your progress, and improve your skills
+          <div className={styles["home__feature"]}>
+            <div className={styles["home__feature-icon"]}>👨‍🎓</div>
+            <h3 className={styles["home__feature-title"]}>For Students</h3>
+            <p className={styles["home__feature-desc"]}>
+              Take quizzes, review your results, and monitor your learning journey with detailed performance analytics.
             </p>
           </div>
-
-          <div style={{
-            backgroundColor: "#ffffff",
-            border: "1px solid #dee2e6",
-            borderRadius: "12px",
-            padding: "2rem",
-            textAlign: "center",
-            boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
-          }}>
-            <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>📈</div>
-            <h3 style={{ color: "#343a40", margin: "0 0 0.5rem 0" }}>Track Progress</h3>
-            <p style={{ color: "#6c757d", margin: 0 }}>
-              Monitor performance and identify areas for improvement
+          <div className={styles["home__feature"]}>
+            <div className={styles["home__feature-icon"]}>📈</div>
+            <h3 className={styles["home__feature-title"]}>Track Progress</h3>
+            <p className={styles["home__feature-desc"]}>
+              Detailed analytics and insights help identify strengths and areas for improvement over time.
+            </p>
+          </div>
+          <div className={styles["home__feature"]}>
+            <div className={styles["home__feature-icon"]}>📚</div>
+            <h3 className={styles["home__feature-title"]}>Rich Materials</h3>
+            <p className={styles["home__feature-desc"]}>
+              Teachers can share PDFs, videos, and transcripts. Students access materials linked to their quizzes.
             </p>
           </div>
         </div>
@@ -343,4 +221,5 @@ const Home = () => {
     </div>
   );
 };
+
 export default Home;
