@@ -1,6 +1,0 @@
-com/materialService/material_service/service/SupabaseStorageService.class
-com/materialService/material_service/service/MaterialService.class
-com/materialService/material_service/MaterialServiceApplication.class
-com/materialService/material_service/dao/LectureMaterialRepository.class
-com/materialService/material_service/model/LectureMaterial.class
-com/materialService/material_service/controller/MaterialController.class

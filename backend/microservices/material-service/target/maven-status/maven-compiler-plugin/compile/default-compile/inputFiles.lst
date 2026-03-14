@@ -1,6 +1,0 @@
-/home/runner/work/quizApp/quizApp/backend/microservices/material-service/src/main/java/com/materialService/material_service/service/MaterialService.java
-/home/runner/work/quizApp/quizApp/backend/microservices/material-service/src/main/java/com/materialService/material_service/model/LectureMaterial.java
-/home/runner/work/quizApp/quizApp/backend/microservices/material-service/src/main/java/com/materialService/material_service/controller/MaterialController.java
-/home/runner/work/quizApp/quizApp/backend/microservices/material-service/src/main/java/com/materialService/material_service/MaterialServiceApplication.java
-/home/runner/work/quizApp/quizApp/backend/microservices/material-service/src/main/java/com/materialService/material_service/service/SupabaseStorageService.java
-/home/runner/work/quizApp/quizApp/backend/microservices/material-service/src/main/java/com/materialService/material_service/dao/LectureMaterialRepository.java
