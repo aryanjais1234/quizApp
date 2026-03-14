@@ -1,0 +1,34 @@
+@use '../../../styles/abstracts/variables' as *;
+@use 'sass:color';
+
+.alert {
+  padding: $space-3 $space-4;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  line-height: $line-height-relaxed;
+  border-left: 4px solid transparent;
+
+  &--success {
+    background-color: $color-success-bg;
+    color: $color-success-dark;
+    border-left-color: $color-success;
+  }
+
+  &--error {
+    background-color: $color-danger-bg;
+    color: $color-danger-dark;
+    border-left-color: $color-danger;
+  }
+
+  &--warning {
+    background-color: $color-warning-bg;
+    color: $color-warning-dark;
+    border-left-color: $color-warning;
+  }
+
+  &--info {
+    background-color: $color-info-bg;
+    color: $color-info-dark;
+    border-left-color: $color-info;
+  }
+}
