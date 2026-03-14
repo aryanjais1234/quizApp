@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import styles from './Card.module.scss';
 
 const Card = ({
@@ -46,5 +47,17 @@ Card.Footer = function CardFooter({ children, className = '' }) {
     </div>
   );
 };
+
+Card.propTypes = {
+  children: PropTypes.node,
+  className: PropTypes.string,
+  onClick: PropTypes.func,
+  hoverable: PropTypes.bool,
+  padding: PropTypes.oneOf(['none', 'sm', 'md', 'lg']),
+};
+
+Card.Header.propTypes = { children: PropTypes.node, className: PropTypes.string };
+Card.Body.propTypes  = { children: PropTypes.node, className: PropTypes.string };
+Card.Footer.propTypes = { children: PropTypes.node, className: PropTypes.string };
 
 export default Card;

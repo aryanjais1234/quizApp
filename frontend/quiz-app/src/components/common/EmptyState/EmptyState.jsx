@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import styles from './EmptyState.module.scss';
 
 const EmptyState = ({ icon = '📭', title, description, action }) => {
@@ -9,6 +10,13 @@ const EmptyState = ({ icon = '📭', title, description, action }) => {
       {action && <div className={styles['empty-state__action']}>{action}</div>}
     </div>
   );
+};
+
+EmptyState.propTypes = {
+  icon: PropTypes.string,
+  title: PropTypes.string,
+  description: PropTypes.string,
+  action: PropTypes.node,
 };
 
 export default EmptyState;

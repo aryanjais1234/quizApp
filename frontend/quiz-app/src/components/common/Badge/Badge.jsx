@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import styles from './Badge.module.scss';
 
 const Badge = ({
@@ -14,6 +15,13 @@ const Badge = ({
   ].filter(Boolean).join(' ');
 
   return <span className={classes}>{children}</span>;
+};
+
+Badge.propTypes = {
+  children: PropTypes.node.isRequired,
+  variant: PropTypes.oneOf(['primary', 'success', 'warning', 'danger', 'info', 'gray']),
+  size: PropTypes.oneOf(['sm', 'md', 'lg']),
+  className: PropTypes.string,
 };
 
 export default Badge;

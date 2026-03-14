@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import styles from './LoadingSpinner.module.scss';
 
 const LoadingSpinner = ({ size = 'md', message = 'Loading...' }) => {
@@ -7,6 +8,11 @@ const LoadingSpinner = ({ size = 'md', message = 'Loading...' }) => {
       {message && <p className={styles['loading-spinner__message']}>{message}</p>}
     </div>
   );
+};
+
+LoadingSpinner.propTypes = {
+  size: PropTypes.oneOf(['sm', 'md', 'lg']),
+  message: PropTypes.string,
 };
 
 export default LoadingSpinner;
