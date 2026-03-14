@@ -89,6 +89,23 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
                         }
                     }
 
+                    // Material upload and delete restricted to ROLE_TEACHER
+                    if (path.startsWith("/materials/upload") || path.startsWith("/materials/my")) {
+                        if (!"ROLE_TEACHER".equalsIgnoreCase(role)) {
+                            throw new RuntimeException("Access Denied: Only teachers can upload materials");
+                        }
+                    }
+                    if (path.matches("/materials/\\d+$") && exchange.getRequest().getMethod().name().equals("DELETE")) {
+                        if (!"ROLE_TEACHER".equalsIgnoreCase(role)) {
+                            throw new RuntimeException("Access Denied: Only teachers can delete materials");
+                        }
+                    }
+                    if (path.matches("/materials/\\d+/transcript$")) {
+                        if (!"ROLE_TEACHER".equalsIgnoreCase(role)) {
+                            throw new RuntimeException("Access Denied: Only teachers can update transcripts");
+                        }
+                    }
+
                 } catch (Exception e) {
                     throw new RuntimeException("Unauthorized access: " + e.getMessage());
                 }

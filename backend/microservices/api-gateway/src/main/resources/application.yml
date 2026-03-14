@@ -28,6 +28,13 @@ spring:
           predicates:
             - Path=/auth/**
 
+        - id: material-service
+          uri: lb://MATERIAL-SERVICE
+          predicates:
+            - Path=/materials/**
+          filters:
+            - AuthFilter
+
       globalcors:
         cors-configurations:
           '[/**]':

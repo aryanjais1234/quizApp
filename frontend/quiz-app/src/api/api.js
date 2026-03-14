@@ -121,4 +121,36 @@ export const getQuizSubmissions = (quizId) =>
 export const getSubmissionById = (quizId) =>
   apiClient.get(`${quizBase}/analytics/${quizId}`);
 
+// Material Service APIs
+const materialBase = `${API_BASE}/materials`;
+
+export const uploadMaterial = (file, title, description, category) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("title", title);
+  if (description) formData.append("description", description);
+  formData.append("category", category);
+  return apiClient.post(`${materialBase}/upload`, formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+};
+
+export const getMyMaterials = () =>
+  apiClient.get(`${materialBase}/my`);
+
+export const getMaterialsByTeacher = (teacherUsername) =>
+  apiClient.get(`${materialBase}/teacher/${teacherUsername}`);
+
+export const getMaterialById = (id) =>
+  apiClient.get(`${materialBase}/${id}`);
+
+export const getMaterialsByCategory = (category) =>
+  apiClient.get(`${materialBase}/category/${category}`);
+
+export const deleteMaterial = (id) =>
+  apiClient.delete(`${materialBase}/${id}`);
+
+export const updateTranscript = (id, transcript) =>
+  apiClient.put(`${materialBase}/${id}/transcript`, { transcript });
+
 

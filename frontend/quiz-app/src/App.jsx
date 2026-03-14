@@ -15,6 +15,8 @@ import QuizAnalytics from "./pages/QuizAnalytics";
 import QuizResult from "./pages/QuizResult";
 import QuizSubmissions from "./pages/QuizSubmissions";
 import StudentResponse from "./pages/StudentResponse";
+import UploadMaterial from "./pages/UploadMaterial";
+import TeacherMaterials from "./pages/TeacherMaterials";
 import Header from "./components/Header";
 
 function App() {
@@ -47,6 +49,8 @@ function App() {
             path="/student-response/:submissionId"
             element={<StudentResponse />}
           />
+          <Route path="/upload-material" element={<UploadMaterial />} />
+          <Route path="/teacher-materials" element={<TeacherMaterials />} />
         </Routes>
       </Router>
     </AuthProvider>
