@@ -154,3 +154,32 @@ export const updateTranscript = (id, transcript) =>
   apiClient.put(`${materialBase}/${id}/transcript`, { transcript });
 
 
+
+// AI Agent Service APIs (port 8083 — called directly, not via gateway)
+const AI_SERVICE_BASE = "http://localhost:8083";
+
+// Dedicated axios instance for AI service (includes auth token)
+const aiClient = axios.create({
+  baseURL: AI_SERVICE_BASE,
+  headers: { "Content-Type": "application/json" },
+});
+
+aiClient.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+export const generateQuizAI = (data) =>
+  aiClient.post("/ai/generate-quiz", data);
+
+export const saveQuizAI = (data) =>
+  aiClient.post("/ai/quiz/save", data);
+
+export const chatAI = (data) =>
+  aiClient.post("/ai/chat", data);
+
+export const analyzeStudentAI = (data) =>
+  aiClient.post("/ai/analyze-student", data);
