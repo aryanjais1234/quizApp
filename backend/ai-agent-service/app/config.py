@@ -11,6 +11,9 @@ class Settings(BaseSettings):
     # ChromaDB persistent storage
     chroma_persist_dir: str = "./chroma_data"
 
+    # Disable ChromaDB anonymous telemetry (set to True only if you want to share usage data)
+    anonymized_telemetry: bool = False
+
     # Sentence-transformer model for embeddings
     embedding_model: str = "all-MiniLM-L6-v2"
 
