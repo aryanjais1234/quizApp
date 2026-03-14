@@ -1,5 +1,6 @@
 @use '../../../styles/abstracts/variables' as *;
 @use '../../../styles/abstracts/mixins' as *;
+@use 'sass:color';
 
 // Block
 .btn {
@@ -51,7 +52,7 @@
     border-color: $color-success;
 
     &:hover:not(:disabled) {
-      background-color: darken($color-success, 8%);
+      background-color: color.adjust($color-success, $lightness: -8%);
     }
   }
 
@@ -61,7 +62,7 @@
     border-color: $color-danger;
 
     &:hover:not(:disabled) {
-      background-color: darken($color-danger, 8%);
+      background-color: color.adjust($color-danger, $lightness: -8%);
     }
   }
 
@@ -71,7 +72,7 @@
     border-color: $color-warning;
 
     &:hover:not(:disabled) {
-      background-color: darken($color-warning, 8%);
+      background-color: color.adjust($color-warning, $lightness: -8%);
     }
   }
 
@@ -92,7 +93,7 @@
     border-color: $color-info;
 
     &:hover:not(:disabled) {
-      background-color: darken($color-info, 8%);
+      background-color: color.adjust($color-info, $lightness: -8%);
     }
   }
 

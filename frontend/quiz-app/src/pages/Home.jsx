@@ -23,7 +23,7 @@ const Home = () => {
   const { isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
 
-  const teacherCards = [
+  const teacherQuizCards = [
     {
       icon: "📊",
       iconColor: "purple",
@@ -59,6 +59,9 @@ const Home = () => {
       description: "Create new questions for your question bank",
       path: "/add-question",
     },
+  ];
+
+  const teacherMaterialCards = [
     {
       icon: "📚",
       iconColor: "teal",
@@ -76,6 +79,8 @@ const Home = () => {
       variant: "materials",
     },
   ];
+
+  const teacherCards = [...teacherQuizCards, ...teacherMaterialCards];
 
   const studentCards = [
     {
@@ -145,7 +150,7 @@ const Home = () => {
               <div className={styles["home__section"]}>
                 <h2 className={styles["home__section-title"]}>📋 Quiz Management</h2>
                 <div className={styles["home__grid"]}>
-                  {teacherCards.slice(0, 5).map((card) => (
+                  {teacherQuizCards.map((card) => (
                     <DashboardCard
                       key={card.path}
                       {...card}
@@ -158,7 +163,7 @@ const Home = () => {
               <div className={styles["home__section"]}>
                 <h2 className={styles["home__section-title"]}>📚 Learning Materials</h2>
                 <div className={styles["home__grid"]}>
-                  {teacherCards.slice(5).map((card) => (
+                  {teacherMaterialCards.map((card) => (
                     <DashboardCard
                       key={card.path}
                       {...card}
