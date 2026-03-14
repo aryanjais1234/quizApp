@@ -17,6 +17,7 @@ import QuizSubmissions from "./pages/QuizSubmissions";
 import StudentResponse from "./pages/StudentResponse";
 import UploadMaterial from "./pages/UploadMaterial";
 import TeacherMaterials from "./pages/TeacherMaterials";
+import AIQuizGenerator from "./pages/AIQuizGenerator";
 import Header from "./components/layout/Header";
 
 function App() {
@@ -51,6 +52,7 @@ function App() {
           />
           <Route path="/upload-material" element={<UploadMaterial />} />
           <Route path="/teacher-materials" element={<TeacherMaterials />} />
+          <Route path="/ai-quiz-generator" element={<AIQuizGenerator />} />
         </Routes>
       </Router>
     </AuthProvider>
