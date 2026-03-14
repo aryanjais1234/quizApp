@@ -1,0 +1,108 @@
+// Abstracts
+@use 'sass:color';
+@use 'abstracts/variables' as *;
+@use 'abstracts/mixins' as *;
+
+// Base
+@use 'base/reset';
+@use 'base/typography';
+
+// Global utility classes
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 $space-4;
+
+  @include respond-md {
+    padding: 0 $space-6;
+  }
+}
+
+.page {
+  min-height: calc(100vh - $nav-height);
+  padding: $space-8 $space-4;
+
+  @include respond-md {
+    padding: $space-8 $space-6;
+  }
+}
+
+// Form utilities
+.form-group {
+  margin-bottom: $space-5;
+
+  label {
+    display: block;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-gray-700;
+    margin-bottom: $space-2;
+  }
+
+  input,
+  textarea,
+  select {
+    width: 100%;
+    padding: $space-3 $space-4;
+    border: 1px solid $color-gray-300;
+    border-radius: $radius-md;
+    font-size: $font-size-base;
+    color: $color-gray-800;
+    background-color: $color-white;
+    transition: border-color $transition-fast, box-shadow $transition-fast;
+
+    &::placeholder {
+      color: $color-gray-400;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: $color-primary;
+      box-shadow: 0 0 0 3px rgba($color-primary, 0.15);
+    }
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+}
+
+// Required asterisk
+.required {
+  color: $color-danger;
+  margin-left: $space-1;
+}
+
+// Alert utilities
+.alert {
+  padding: $space-3 $space-4;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  margin-bottom: $space-4;
+
+  &--success {
+    background-color: $color-success-bg;
+    color: $color-success-dark;
+    border: 1px solid color.adjust($color-success-bg, $lightness: -10%);
+  }
+
+  &--error {
+    background-color: $color-danger-bg;
+    color: $color-danger-dark;
+    border: 1px solid color.adjust($color-danger-bg, $lightness: -10%);
+  }
+
+  &--warning {
+    background-color: $color-warning-bg;
+    color: $color-warning-dark;
+    border: 1px solid color.adjust($color-warning-bg, $lightness: -10%);
+  }
+
+  &--info {
+    background-color: $color-info-bg;
+    color: $color-info-dark;
+    border: 1px solid color.adjust($color-info-bg, $lightness: -10%);
+  }
+}
