@@ -76,6 +76,27 @@ services:
     networks:
       - microservices-net
 
+  material-service:
+    build: ./material-service
+    container_name: material-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db:5432/materialdb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: aryan
+      SERVER_PORT: 8082
+      SPRING_APPLICATION_NAME: material-service
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-registry:8761/eureka/
+      SUPABASE_URL: ${SUPABASE_URL:-https://your-project.supabase.co}
+      SUPABASE_SERVICE_KEY: ${SUPABASE_SERVICE_KEY:-your-service-role-key}
+      SUPABASE_BUCKET: ${SUPABASE_BUCKET:-lecture-materials}
+    depends_on:
+      - db
+      - service-registry
+    ports:
+      - "8082:8082"
+    networks:
+      - microservices-net
+
   api-gateway:
     build: ./api-gateway
     container_name: api-gateway

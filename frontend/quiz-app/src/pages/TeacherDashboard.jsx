@@ -68,21 +68,38 @@ const TeacherDashboard = () => {
         }}
       >
         <h1 style={{ color: "#343a40", margin: 0 }}>My Quizzes Dashboard</h1>
-        <button
-          onClick={() => navigate("/create-quiz")}
-          style={{
-            padding: "0.75rem 1.5rem",
-            backgroundColor: "#28a745",
-            color: "white",
-            border: "none",
-            borderRadius: "8px",
-            cursor: "pointer",
-            fontWeight: "500",
-            fontSize: "1rem",
-          }}
-        >
-          + Create New Quiz
-        </button>
+        <div style={{ display: "flex", gap: "0.75rem" }}>
+          <button
+            onClick={() => navigate("/teacher-materials")}
+            style={{
+              padding: "0.75rem 1.5rem",
+              backgroundColor: "#6f42c1",
+              color: "white",
+              border: "none",
+              borderRadius: "8px",
+              cursor: "pointer",
+              fontWeight: "500",
+              fontSize: "1rem",
+            }}
+          >
+            📚 My Materials
+          </button>
+          <button
+            onClick={() => navigate("/create-quiz")}
+            style={{
+              padding: "0.75rem 1.5rem",
+              backgroundColor: "#28a745",
+              color: "white",
+              border: "none",
+              borderRadius: "8px",
+              cursor: "pointer",
+              fontWeight: "500",
+              fontSize: "1rem",
+            }}
+          >
+            + Create New Quiz
+          </button>
+        </div>
       </div>
 
       {error && (
