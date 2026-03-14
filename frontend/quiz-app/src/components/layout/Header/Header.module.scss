@@ -1,0 +1,253 @@
+@use '../../../styles/abstracts/variables' as *;
+@use '../../../styles/abstracts/mixins' as *;
+
+// Block: navbar
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: $z-sticky;
+  height: $nav-height;
+  background-color: $color-white;
+  border-bottom: 1px solid $color-gray-200;
+  box-shadow: $shadow-sm;
+
+  &__inner {
+    @include flex-between;
+    height: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 $space-6;
+  }
+
+  // Left section: brand + nav links
+  &__left {
+    @include flex-start;
+    gap: $space-2;
+  }
+
+  // Brand
+  &__brand {
+    @include flex-start;
+    gap: $space-2;
+    text-decoration: none;
+    margin-right: $space-4;
+
+    &-icon {
+      font-size: 1.5rem;
+      line-height: 1;
+    }
+
+    &-text {
+      font-size: $font-size-lg;
+      font-weight: $font-weight-bold;
+      color: $color-primary;
+      letter-spacing: -0.025em;
+    }
+  }
+
+  // Nav links
+  &__links {
+    display: none;
+    gap: $space-1;
+
+    @include respond-md {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  &__link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: $space-1;
+    padding: $space-2 $space-3;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-gray-600;
+    text-decoration: none;
+    border-radius: $radius-md;
+    transition: color $transition-fast, background-color $transition-fast;
+
+    &:hover {
+      color: $color-primary;
+      background-color: $color-primary-bg;
+    }
+
+    &--active {
+      color: $color-primary;
+      background-color: $color-primary-bg;
+    }
+  }
+
+  // Divider between link groups
+  &__divider {
+    width: 1px;
+    height: 20px;
+    background-color: $color-gray-200;
+    margin: 0 $space-2;
+  }
+
+  // Right section: user info + actions
+  &__right {
+    @include flex-start;
+    gap: $space-3;
+  }
+
+  // User greeting
+  &__user {
+    @include flex-start;
+    gap: $space-2;
+
+    &-avatar {
+      @include flex-center;
+      width: 32px;
+      height: 32px;
+      border-radius: $radius-full;
+      background: linear-gradient(135deg, $color-primary, $color-secondary);
+      color: $color-white;
+      font-size: $font-size-xs;
+      font-weight: $font-weight-bold;
+      flex-shrink: 0;
+    }
+
+    &-name {
+      display: none;
+      font-size: $font-size-sm;
+      font-weight: $font-weight-medium;
+      color: $color-gray-700;
+
+      @include respond-md {
+        display: block;
+      }
+    }
+
+    &-role {
+      display: none;
+      font-size: $font-size-xs;
+      color: $color-gray-400;
+
+      @include respond-lg {
+        display: block;
+      }
+    }
+  }
+
+  // Logout button
+  &__logout {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-1;
+    padding: $space-2 $space-3;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-danger;
+    background-color: transparent;
+    border: 1px solid $color-danger;
+    border-radius: $radius-md;
+    cursor: pointer;
+    transition: all $transition-fast;
+
+    &:hover {
+      background-color: $color-danger;
+      color: $color-white;
+    }
+  }
+
+  // Auth links (when logged out)
+  &__auth {
+    @include flex-start;
+    gap: $space-2;
+  }
+
+  &__auth-link {
+    padding: $space-2 $space-4;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    border-radius: $radius-md;
+    text-decoration: none;
+    transition: all $transition-fast;
+
+    &--login {
+      color: $color-primary;
+      background-color: transparent;
+      border: 1px solid $color-primary;
+
+      &:hover {
+        background-color: $color-primary-bg;
+        color: $color-primary-dark;
+      }
+    }
+
+    &--register {
+      color: $color-white;
+      background-color: $color-primary;
+      border: 1px solid $color-primary;
+
+      &:hover {
+        background-color: $color-primary-dark;
+        color: $color-white;
+      }
+    }
+  }
+
+  // Mobile menu toggle (visible on small screens)
+  &__menu-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $space-2;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: $color-gray-600;
+    border-radius: $radius-md;
+
+    @include respond-md {
+      display: none;
+    }
+
+    &:hover {
+      background-color: $color-gray-100;
+    }
+  }
+
+  // Mobile dropdown menu
+  &__mobile-menu {
+    display: none;
+    position: absolute;
+    top: $nav-height;
+    left: 0;
+    right: 0;
+    background-color: $color-white;
+    border-bottom: 1px solid $color-gray-200;
+    box-shadow: $shadow-lg;
+    padding: $space-4;
+    z-index: $z-dropdown;
+    flex-direction: column;
+    gap: $space-1;
+
+    &--open {
+      display: flex;
+    }
+
+    @include respond-md {
+      display: none !important;
+    }
+  }
+
+  &__mobile-link {
+    padding: $space-3 $space-4;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-gray-600;
+    text-decoration: none;
+    border-radius: $radius-md;
+    transition: all $transition-fast;
+
+    &:hover {
+      color: $color-primary;
+      background-color: $color-primary-bg;
+    }
+  }
+}

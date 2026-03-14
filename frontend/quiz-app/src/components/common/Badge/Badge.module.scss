@@ -1,0 +1,57 @@
+@use '../../../styles/abstracts/variables' as *;
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-1;
+  font-weight: $font-weight-medium;
+  border-radius: $radius-full;
+  line-height: 1;
+
+  // Sizes
+  &--sm {
+    padding: $space-1 $space-2;
+    font-size: $font-size-xs;
+  }
+
+  &--md {
+    padding: 3px $space-3;
+    font-size: $font-size-xs;
+  }
+
+  &--lg {
+    padding: $space-2 $space-4;
+    font-size: $font-size-sm;
+  }
+
+  // Variants
+  &--primary {
+    background-color: $color-primary-bg;
+    color: $color-primary-dark;
+  }
+
+  &--success {
+    background-color: $color-success-bg;
+    color: $color-success-dark;
+  }
+
+  &--warning {
+    background-color: $color-warning-bg;
+    color: $color-warning-dark;
+  }
+
+  &--danger {
+    background-color: $color-danger-bg;
+    color: $color-danger-dark;
+  }
+
+  &--info {
+    background-color: $color-info-bg;
+    color: $color-info-dark;
+  }
+
+  &--gray {
+    background-color: $color-gray-100;
+    color: $color-gray-700;
+  }
+}
