@@ -31,6 +31,6 @@ eureka:
       defaultZone: http://localhost:8761/eureka
 
 supabase:
-  url: ${SUPABASE_URL:https://icjkkfcxmwdvilbrirqe.supabase.co}
-  service-key: ${SUPABASE_SERVICE_KEY:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImljamtrZmN4bXdkdmlsYnJpcnFlIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MzQ4OTg5MiwiZXhwIjoyMDg5MDY1ODkyfQ.t7vPxooLpe1VcgeX4-pLKZu1XLqvcIqXIx14JVLXJak}
+  url: ${SUPABASE_URL}
+  service-key: ${SUPABASE_SERVICE_KEY}
   bucket: ${SUPABASE_BUCKET:lecture-materials}
