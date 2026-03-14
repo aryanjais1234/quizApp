@@ -7,11 +7,11 @@ pydantic==2.6.0
 pydantic-settings==2.1.0
 
 # ─── Google Generative AI (Gemini) ────────────────────────────────────────────
-google-generativeai==0.3.2
+google-generativeai==0.4.1
 
 # ─── LangChain (orchestration utilities) ─────────────────────────────────────
-langchain==0.1.5
-langchain-google-genai==0.0.6
+langchain==0.1.16
+langchain-google-genai==0.0.11
 
 # ─── Vector Database ──────────────────────────────────────────────────────────
 chromadb==0.4.22

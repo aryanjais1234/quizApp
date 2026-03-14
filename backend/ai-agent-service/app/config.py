@@ -1,9 +1,8 @@
 from pydantic_settings import BaseSettings
 
-
 class Settings(BaseSettings):
     # Gemini API
-    gemini_api_key: str = ""
+    gemini_api_key: str = "AIzaSyDFYCYze4jYrPR5h0ylBCehA_B0wdyeBdQ"
 
     # JWT (must match Spring Boot secret)
     jwt_secret: str = (

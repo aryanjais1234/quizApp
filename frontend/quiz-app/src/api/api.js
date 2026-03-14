@@ -156,7 +156,7 @@ export const updateTranscript = (id, transcript) =>
 
 
 // AI Agent Service APIs (port 8083 — called directly, not via gateway)
-const AI_SERVICE_BASE = "http://localhost:8083";
+const AI_SERVICE_BASE = "http://localhost:8000";
 
 // Dedicated axios instance for AI service (includes auth token)
 const aiClient = axios.create({

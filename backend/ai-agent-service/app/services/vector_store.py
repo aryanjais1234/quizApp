@@ -1,7 +1,9 @@
+import os
+os.environ["ANONYMIZED_TELEMETRY"] = "False"
+
 from typing import Any, Dict, List, Optional
 
 import chromadb
-from chromadb.config import Settings as ChromaSettings
 
 from app.config import settings
 
@@ -21,12 +23,8 @@ class VectorStore:
 
     def _get_client(self):
         if self._client is None:
-            self._client = chromadb.Client(
-                ChromaSettings(
-                    chroma_db_impl="duckdb+parquet",
-                    persist_directory=settings.chroma_persist_dir,
-                    anonymized_telemetry=False,
-                )
+            self._client = chromadb.PersistentClient(
+                path=settings.chroma_persist_dir,
             )
         return self._client
 
