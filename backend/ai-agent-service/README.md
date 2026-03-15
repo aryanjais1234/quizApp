@@ -226,6 +226,7 @@ docker compose up --build
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `GEMINI_API_KEY` | *(required)* | Google Gemini API key |
+| `GEMINI_MODEL` | `gemini-1.5-flash` | Gemini model to use |
 | `JWT_SECRET` | *(Spring Boot secret)* | Must match `user-service` secret |
 | `JWT_ALGORITHM` | `HS256` | JWT signing algorithm |
 | `CHROMA_PERSIST_DIR` | `./chroma_data` | ChromaDB storage path |
@@ -282,13 +283,12 @@ POST /ai/quiz/save   (nothing persisted)
 
 | Library | Version | Purpose |
 |---------|---------|---------|
-| FastAPI | 0.109.0 | REST API framework |
-| Uvicorn | 0.27.0 | ASGI server |
-| google-generativeai | 0.3.2 | Gemini API client |
-| chromadb | 0.4.22 | Local vector database |
-| sentence-transformers | 2.4.0 | Text embeddings |
-| langchain | 0.1.5 | Orchestration utilities |
-| PyPDF2 / pdfplumber | 3.0.1 / 0.10.3 | PDF text extraction |
-| httpx | 0.26.0 | Async HTTP client |
-| PyJWT | 2.8.0 | JWT validation |
-| pydantic-settings | 2.1.0 | Configuration management |
+| FastAPI | ≥0.109.0 | REST API framework |
+| Uvicorn | ≥0.27.0 | ASGI server |
+| google-genai | ≥1.0.0 | Gemini API client (new SDK) |
+| chromadb | ≥0.5.0 | Local vector database |
+| sentence-transformers | ≥2.4.0 | Text embeddings |
+| PyPDF2 / pdfplumber | ≥3.0.1 / ≥0.10.3 | PDF text extraction |
+| httpx | ≥0.26.0 | Async HTTP client |
+| PyJWT | ≥2.8.0 | JWT validation |
+| pydantic-settings | ≥2.1.0 | Configuration management |

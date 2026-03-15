@@ -1,31 +1,27 @@
 # ─── Core Framework ───────────────────────────────────────────────────────────
-fastapi==0.109.0
-uvicorn==0.27.0
-python-multipart==0.0.9
-python-dotenv==1.0.1
-pydantic==2.6.0
-pydantic-settings==2.1.0
+fastapi>=0.109.0
+uvicorn>=0.27.0
+python-multipart>=0.0.9
+python-dotenv>=1.0.1
+pydantic>=2.6.0
+pydantic-settings>=2.1.0
 
 # ─── Google Generative AI (Gemini) ────────────────────────────────────────────
-google-generativeai==0.4.1
-
-# ─── LangChain (orchestration utilities) ─────────────────────────────────────
-langchain==0.1.16
-langchain-google-genai==0.0.11
+google-genai>=1.0.0
 
 # ─── Vector Database ──────────────────────────────────────────────────────────
-chromadb==0.4.22
+chromadb>=0.5.0
 
 # ─── Embeddings ───────────────────────────────────────────────────────────────
-sentence-transformers==2.4.0
+sentence-transformers>=2.4.0
 
 # ─── PDF Text Extraction ──────────────────────────────────────────────────────
-PyPDF2==3.0.1
-pdfplumber==0.10.3
+PyPDF2>=3.0.1
+pdfplumber>=0.10.3
 
 # ─── HTTP Client (async calls to other microservices) ────────────────────────
-httpx==0.26.0
+httpx>=0.26.0
 
 # ─── JWT Validation (matching Spring Boot HS256 tokens) ──────────────────────
-PyJWT==2.8.0
-cryptography==42.0.2
+PyJWT>=2.8.0
+cryptography>=42.0.2

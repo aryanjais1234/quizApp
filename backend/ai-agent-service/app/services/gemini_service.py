@@ -3,7 +3,7 @@ import re
 import uuid
 from typing import Any, Dict, List, Optional, Tuple
 
-import google.generativeai as genai
+from google import genai
 
 from app.config import settings
 from app.mcp.memory import append_assistant, append_user, get_history
@@ -16,11 +16,19 @@ from app.models.schemas import GeneratedQuestion
 
 
 class GeminiService:
-    """Wrapper around the Google Generative AI (Gemini) API."""
+    """Wrapper around the Google Generative AI (Gemini) API using google-genai SDK."""
 
     def __init__(self):
-        genai.configure(api_key=settings.gemini_api_key)
-        self.model = genai.GenerativeModel("gemini-pro")
+        self._client = genai.Client(api_key=settings.gemini_api_key)
+        self._model = settings.gemini_model
+
+    def _generate(self, prompt: str) -> str:
+        """Call Gemini and return the response text."""
+        response = self._client.models.generate_content(
+            model=self._model,
+            contents=prompt,
+        )
+        return response.text.strip()
 
     # ------------------------------------------------------------------
     # Quiz generation
@@ -53,9 +61,7 @@ class GeminiService:
             f"Generate {num_questions} {difficulty} questions for category: {category}",
         )
 
-        response = self.model.generate_content(prompt)
-        raw_text = response.text.strip()
-
+        raw_text = self._generate(prompt)
         questions = self._parse_questions(raw_text, difficulty, category)
 
         append_assistant(session_id, f"Generated {len(questions)} questions")
@@ -87,8 +93,7 @@ class GeminiService:
             question_responses=question_responses,
         )
 
-        response = self.model.generate_content(prompt)
-        raw_text = response.text.strip()
+        raw_text = self._generate(prompt)
         analysis = self._parse_analysis(raw_text)
         return analysis, session_id
 
@@ -118,8 +123,7 @@ class GeminiService:
         )
 
         append_user(session_id, question)
-        response = self.model.generate_content(prompt)
-        answer = response.text.strip()
+        answer = self._generate(prompt)
         append_assistant(session_id, answer)
         return answer
 
