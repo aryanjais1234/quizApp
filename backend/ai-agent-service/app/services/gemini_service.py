@@ -3,6 +3,7 @@ import re
 import uuid
 from typing import Any, Dict, List, Optional, Tuple
 
+from fastapi import HTTPException
 from google import genai
 
 from app.config import settings
@@ -19,12 +20,39 @@ class GeminiService:
     """Wrapper around the Google Generative AI (Gemini) API using google-genai SDK."""
 
     def __init__(self):
-        self._client = genai.Client(api_key=settings.gemini_api_key)
+        # Lazily initialize the Gemini client to avoid crashing app startup
+        # when env vars are not configured yet.
+        self._client = None
         self._model = settings.gemini_model
+
+    def _get_client(self):
+        if self._client is not None:
+            return self._client
+
+        api_key = (settings.gemini_api_key or "").strip()
+        if not api_key or api_key == "replace_with_real_gemini_key":
+            raise HTTPException(
+                status_code=503,
+                detail=(
+                    "GEMINI_API_KEY is not configured. "
+                    "Set it in backend/ai-agent-service/.env and restart the service."
+                ),
+            )
+
+        try:
+            self._client = genai.Client(api_key=api_key)
+        except Exception as exc:
+            raise HTTPException(
+                status_code=503,
+                detail=f"Failed to initialize Gemini client: {exc}",
+            ) from exc
+
+        return self._client
 
     def _generate(self, prompt: str) -> str:
         """Call Gemini and return the response text."""
-        response = self._client.models.generate_content(
+        client = self._get_client()
+        response = client.models.generate_content(
             model=self._model,
             contents=prompt,
         )
