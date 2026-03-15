@@ -91,6 +91,10 @@ class DocumentProcessor:
             if chunk:
                 chunks.append(chunk)
 
+            # If we have reached the end of the text, stop.
+            if end >= text_len:
+                break
+
             start = end - self.chunk_overlap
             if start >= text_len:
                 break
@@ -101,8 +105,13 @@ class DocumentProcessor:
     # Combined pipeline
     # ------------------------------------------------------------------
 
+    # Default cap: ~5 million characters ≈ several thousand pages of text.
+    MAX_TEXT_LENGTH = 5_000_000
+
     def process_text(self, text: str, source_id: str) -> List[dict]:
         """Return a list of chunk dicts ready for the embedding pipeline."""
+        if len(text) > self.MAX_TEXT_LENGTH:
+            text = text[: self.MAX_TEXT_LENGTH]
         chunks = self.chunk_text(text)
         return [
             {
