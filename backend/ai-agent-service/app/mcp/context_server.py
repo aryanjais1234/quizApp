@@ -56,6 +56,23 @@ async def get_teacher_materials(token: str) -> List[Dict[str, Any]]:
     return []
 
 
+async def fetch_file_bytes(file_url: str) -> Optional[bytes]:
+    """Download file content from *file_url* (e.g. Supabase public URL).
+
+    Returns raw bytes on success or ``None`` on failure.
+    """
+    if not file_url:
+        return None
+    async with httpx.AsyncClient(follow_redirects=True) as client:
+        try:
+            response = await client.get(file_url, timeout=60.0)
+            if response.status_code == 200:
+                return response.content
+        except Exception as exc:
+            print(f"[context_server] Error downloading file from {file_url}: {exc}")
+    return None
+
+
 def extract_text_from_material(material: Dict[str, Any]) -> str:
     """Extract usable text content from a material record.
 

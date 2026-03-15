@@ -1,9 +1,23 @@
 from typing import List, Optional
 
-from app.mcp.context_server import extract_text_from_material, get_materials
+from app.mcp.context_server import (
+    extract_text_from_material,
+    fetch_file_bytes,
+    get_materials,
+)
 from app.services.document_processor import DocumentProcessor
 from app.services.embedding_service import EmbeddingService
 from app.services.vector_store import VectorStore
+
+# File types supported for direct text extraction from the uploaded file
+_PDF_TYPES = {"application/pdf"}
+_TEXT_TYPES = {
+    "text/plain",
+    "text/markdown",
+    "text/csv",
+    "text/html",
+    "application/json",
+}
 
 
 class RAGService:
@@ -34,6 +48,13 @@ class RAGService:
             source_id = str(material.get("id"))
             text = extract_text_from_material(material)
 
+            # If no transcript was provided, try to download and extract
+            # text directly from the uploaded file.
+            if not material.get("transcript"):
+                file_text = await self._extract_text_from_file(material)
+                if file_text:
+                    text = text + "\n\n" + file_text if text.strip() else file_text
+
             if not text.strip():
                 print(f"[RAGService] Material {source_id} has no text content — skipping")
                 continue
@@ -62,6 +83,46 @@ class RAGService:
             total_chunks += len(docs)
 
         return total_chunks
+
+    async def _extract_text_from_file(self, material: dict) -> str:
+        """Download the uploaded file and extract its text content.
+
+        Supports PDF files (via DocumentProcessor) and common text-based
+        formats.  Returns an empty string when the file cannot be processed.
+        """
+        file_url = material.get("fileUrl") or material.get("file_url")
+        file_type = (material.get("fileType") or material.get("file_type") or "").lower()
+        source_id = str(material.get("id", "?"))
+
+        if not file_url:
+            return ""
+
+        file_bytes = await fetch_file_bytes(file_url)
+        if not file_bytes:
+            print(f"[RAGService] Could not download file for material {source_id}")
+            return ""
+
+        # PDF extraction
+        if file_type in _PDF_TYPES or file_url.lower().endswith(".pdf"):
+            try:
+                return self.doc_processor.extract_text_from_pdf_bytes(file_bytes)
+            except Exception as exc:
+                print(f"[RAGService] PDF extraction failed for material {source_id}: {exc}")
+                return ""
+
+        # Plain-text / text-based formats
+        if file_type in _TEXT_TYPES or file_url.lower().endswith((".txt", ".md", ".csv")):
+            try:
+                return file_bytes.decode("utf-8", errors="replace")
+            except Exception as exc:
+                print(f"[RAGService] Text decode failed for material {source_id}: {exc}")
+                return ""
+
+        print(
+            f"[RAGService] Unsupported file type '{file_type}' for material {source_id} "
+            f"— add a transcript manually to include this material in quiz generation"
+        )
+        return ""
 
     # ------------------------------------------------------------------
     # Retrieval
