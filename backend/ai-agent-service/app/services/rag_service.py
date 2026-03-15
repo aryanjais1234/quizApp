@@ -53,7 +53,10 @@ class RAGService:
             if not material.get("transcript"):
                 file_text = await self._extract_text_from_file(material)
                 if file_text:
-                    text = text + "\n\n" + file_text if text.strip() else file_text
+                    if text.strip():
+                        text = text + "\n\n" + file_text
+                    else:
+                        text = file_text
 
             if not text.strip():
                 print(f"[RAGService] Material {source_id} has no text content — skipping")
