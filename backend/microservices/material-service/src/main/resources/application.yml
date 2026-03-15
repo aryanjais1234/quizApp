@@ -5,6 +5,9 @@ spring:
   application:
     name: material-service
 
+    config:
+      import: optional:file:.env.properties
+
   datasource:
     driver-class-name: org.postgresql.Driver
 #    url: jdbc:postgresql://postgres-db:5432/materialdb

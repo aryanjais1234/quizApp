@@ -1,4 +1,4 @@
 target/
 
 # Environment secrets
-.env
+env.properties
