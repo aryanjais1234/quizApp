@@ -1,10 +1,16 @@
-# Material Service
+# 📂 Material Service — Lecture Material Management
 
-A Spring Boot microservice for managing lecture materials (notes, PDFs, transcripts) uploaded by teachers. Files are stored in **Supabase Storage**, while metadata is persisted in a dedicated **PostgreSQL** database (`materialdb`).
+Spring Boot microservice for managing lecture materials (notes, PDFs, transcripts) uploaded by teachers. Files are stored in **Supabase Storage**, while metadata is persisted in a dedicated **PostgreSQL** database (`materialdb`).
+
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.3-6DB33F?logo=springboot&logoColor=white)
+![Supabase](https://img.shields.io/badge/Supabase-Storage-3ECF8E?logo=supabase&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-materialdb-4169E1?logo=postgresql&logoColor=white)
+
+> **📊 Service Type:** Business Logic — Content Management
 
 ---
 
-## Architecture Overview
+## 🏗️ Architecture Diagram
 
 ```
 ┌───────────────────────────────────────────────────────────────────┐
@@ -44,38 +50,36 @@ A Spring Boot microservice for managing lecture materials (notes, PDFs, transcri
 
 ---
 
-## REST API Endpoints
+## ✨ Features
 
-| Method | Endpoint                        | Role Required | Description                             |
-|--------|---------------------------------|---------------|-----------------------------------------|
-| POST   | `/materials/upload`             | TEACHER       | Upload file + metadata (multipart/form-data) |
-| GET    | `/materials/my`                 | TEACHER       | Get all materials by the logged-in teacher |
-| GET    | `/materials/teacher/{username}` | Any auth user | Get all materials by teacher username   |
-| GET    | `/materials/{id}`               | Any auth user | Get material by ID                      |
-| GET    | `/materials/category/{category}`| Any auth user | Get materials by course category        |
-| DELETE | `/materials/{id}`               | TEACHER       | Delete material (owner only)            |
-| PUT    | `/materials/{id}/transcript`    | TEACHER       | Add/update transcript text (owner only) |
-
-### Upload Request (multipart/form-data)
-
-| Field        | Type   | Required | Description                   |
-|--------------|--------|----------|-------------------------------|
-| `file`       | File   | ✅ Yes    | The file to upload             |
-| `title`      | String | ✅ Yes    | Display title                  |
-| `category`   | String | ✅ Yes    | Course category                |
-| `description`| String | ❌ No     | Optional description           |
-
-### Transcript Request (PUT)
-
-```json
-{
-  "transcript": "Full text of the lecture..."
-}
-```
+- 📤 **File upload to Supabase Storage** — up to 50 MB per file
+- 🗃️ **Metadata persistence in PostgreSQL** — titles, descriptions, categories, timestamps
+- 📝 **Transcript management** — add/update transcripts for AI processing
+- 🏷️ **Category-based organization** — filter materials by course category
+- 🔒 **Teacher-scoped file management** — owner-only delete and update
+- 📎 **Supports PDF, Word, PowerPoint, Text, Video, Audio** file types
+- 🤖 **Integrates with AI Agent Service** — transcripts used for quiz generation
 
 ---
 
-## Database Schema
+## 📦 Entity
+
+```
+LECTURE_MATERIAL (table: lecture_materials)
+├── id: Integer (PK, auto-generated)
+├── title: String (255, NOT NULL)
+├── description: String (1000)
+├── teacher_username: String (255, NOT NULL)
+├── category: String (255, NOT NULL)
+├── file_url: String (255, NOT NULL)
+├── file_name: String (255, NOT NULL)
+├── file_type: String (255, NOT NULL)
+├── file_size: Long
+├── transcript: Text
+└── uploaded_at: Timestamp (NOT NULL)
+```
+
+### Database Schema
 
 ```sql
 CREATE TABLE lecture_materials (
@@ -97,18 +101,86 @@ CREATE TABLE lecture_materials (
 
 ---
 
-## Configuration
+## 🔌 API Endpoints
+
+| Method | Endpoint                        | Role Required | Description                                       |
+|--------|---------------------------------|---------------|---------------------------------------------------|
+| `POST`   | `/materials/upload`             | TEACHER       | Upload file + metadata (multipart/form-data)      |
+| `GET`    | `/materials/my`                 | TEACHER       | Get all materials by the logged-in teacher        |
+| `GET`    | `/materials/teacher/{username}` | Any auth user | Get all materials by teacher username             |
+| `GET`    | `/materials/{id}`               | Any auth user | Get material by ID                                |
+| `GET`    | `/materials/category/{category}`| Any auth user | Get materials by course category                  |
+| `DELETE` | `/materials/{id}`               | TEACHER       | Delete material (owner only)                      |
+| `PUT`    | `/materials/{id}/transcript`    | TEACHER       | Add/update transcript text (owner only)           |
+
+### Upload Request (multipart/form-data)
+
+| Field        | Type   | Required | Description                   |
+|--------------|--------|----------|-------------------------------|
+| `file`       | File   | ✅ Yes    | The file to upload             |
+| `title`      | String | ✅ Yes    | Display title                  |
+| `category`   | String | ✅ Yes    | Course category                |
+| `description`| String | ❌ No     | Optional description           |
+
+### Transcript Request (PUT)
+
+```json
+{
+  "transcript": "Full text of the lecture..."
+}
+```
+
+---
+
+## 🔀 Flow Diagrams
+
+### Upload Flow
+
+```
+Teacher ──▶ Frontend (/upload-material)
+               │
+               ├── POST /materials/upload (multipart/form-data)
+               │
+               ▼
+         API Gateway (8765)
+               │
+               ├── JWT validation
+               ├── ROLE_TEACHER check
+               │
+               ▼
+        Material Service (8082)
+               │
+               ├── SupabaseStorageService
+               │     └── Upload file ──▶ Supabase Storage (lecture-materials bucket)
+               │                          Path: {teacher}/{uuid}_{filename}
+               │
+               └── LectureMaterialRepository
+                     └── Save metadata ──▶ PostgreSQL (materialdb)
+```
+
+### File Storage Path
+
+Files are stored under the path `{teacherUsername}/{uuid}_{originalFileName}` inside the bucket. This ensures each teacher's files are namespaced separately.
+
+Public URL format:
+```
+https://{project}.supabase.co/storage/v1/object/public/lecture-materials/{teacherUsername}/{uuid}_{filename}
+```
+
+---
+
+## ⚙️ Configuration
 
 ### Environment Variables
 
-| Variable              | Description                         | Example                              |
-|-----------------------|-------------------------------------|--------------------------------------|
-| `SUPABASE_URL`        | Your Supabase project URL           | `https://xxxx.supabase.co`           |
-| `SUPABASE_SERVICE_KEY`| Supabase service role key           | `eyJhbGciOiJIUzI1NiIsInR5cCI6...`    |
-| `SUPABASE_BUCKET`     | Storage bucket name                 | `lecture-materials`                  |
-| `SPRING_DATASOURCE_URL` | PostgreSQL JDBC URL               | `jdbc:postgresql://postgres-db:5432/materialdb` |
-| `SPRING_DATASOURCE_USERNAME` | DB username                | `postgres`                           |
-| `SPRING_DATASOURCE_PASSWORD` | DB password                | `aryan`                              |
+| Variable                     | Description                         | Example                                          |
+|------------------------------|-------------------------------------|--------------------------------------------------|
+| `SUPABASE_URL`               | Your Supabase project URL           | `https://xxxx.supabase.co`                       |
+| `SUPABASE_SERVICE_KEY`       | Supabase service role key           | `eyJhbGciOiJIUzI1NiIsInR5cCI6...`                |
+| `SUPABASE_BUCKET`            | Storage bucket name                 | `lecture-materials`                              |
+| `SPRING_DATASOURCE_URL`     | PostgreSQL JDBC URL                 | `jdbc:postgresql://postgres-db:5432/materialdb`  |
+| `SPRING_DATASOURCE_USERNAME`| DB username                         | `postgres`                                       |
+| `SPRING_DATASOURCE_PASSWORD`| DB password                         | `aryan`                                          |
 
 ### `application.yml`
 
@@ -139,7 +211,7 @@ supabase:
 
 ---
 
-## Supabase Storage Setup
+## ☁️ Supabase Storage Setup
 
 1. Create a project at [supabase.com](https://supabase.com).
 2. Go to **Storage** → **New Bucket** → name it `lecture-materials`.
@@ -149,18 +221,30 @@ supabase:
 
 ---
 
-## File Storage Path
+## 📎 Supported File Types
 
-Files are stored under the path `{teacherUsername}/{uuid}_{originalFileName}` inside the bucket. This ensures each teacher's files are namespaced separately.
+| Type         | Extensions             |
+|--------------|------------------------|
+| PDF          | `.pdf`                 |
+| Word         | `.doc`, `.docx`        |
+| PowerPoint   | `.ppt`, `.pptx`        |
+| Text         | `.txt`                 |
+| Video        | `.mp4`                 |
+| Audio        | `.mp3`                 |
 
-Public URL format:
-```
-https://{project}.supabase.co/storage/v1/object/public/lecture-materials/{teacherUsername}/{uuid}_{filename}
-```
+Maximum file size: **50 MB**
 
 ---
 
-## Running Locally
+## 🚀 How to Run
+
+### Prerequisites
+
+- PostgreSQL running with a `materialdb` database created
+- Service Registry (Eureka Server) running
+- Supabase project with storage bucket configured
+
+### Run Locally
 
 ```bash
 # From the material-service directory
@@ -174,9 +258,7 @@ mvn spring-boot:run \
 
 > Make sure `materialdb` database exists in your local PostgreSQL and Eureka (service-registry) is running.
 
----
-
-## Running with Docker Compose
+### Run with Docker Compose
 
 Add the following to your `.env` file (next to `docker-compose.yml`):
 
@@ -192,15 +274,33 @@ Then run:
 docker-compose up --build material-service
 ```
 
----
-
-## Service Registration
-
-This service registers with **Eureka** under the name `MATERIAL-SERVICE`. The API Gateway routes `/materials/**` to this service via load-balanced Eureka discovery.
+The service starts on **port 8082**.
 
 ---
 
-## Frontend Pages
+## 🛠️ Tech Stack
+
+| Technology | Purpose |
+|------------|---------|
+| Spring Boot 3.5.3 | Application framework |
+| Spring Data JPA | Database access & ORM |
+| PostgreSQL | Metadata persistence |
+| Supabase Storage | File storage (REST API) |
+| Eureka Client | Service discovery registration |
+| Lombok | Boilerplate reduction |
+
+---
+
+## 🔒 Security
+
+- All endpoints require a valid **JWT token** (validated at the API Gateway).
+- Upload, delete, and transcript update require **ROLE_TEACHER**.
+- Teachers can only delete/update their own materials (enforced at the service layer).
+- Supabase service key is never exposed to the frontend; all storage operations happen server-side.
+
+---
+
+## 🖥️ Frontend Pages
 
 | Page              | Route                  | Description                                    |
 |-------------------|------------------------|------------------------------------------------|
@@ -210,24 +310,6 @@ This service registers with **Eureka** under the name `MATERIAL-SERVICE`. The AP
 
 ---
 
-## Supported File Types
+## 📡 Service Registration
 
-| Type         | Extensions             |
-|--------------|------------------------|
-| PDF          | `.pdf`                 |
-| Word         | `.doc`, `.docx`        |
-| PowerPoint   | `.ppt`, `.pptx`        |
-| Text         | `.txt`                 |
-| Video        | `.mp4`                 |
-| Audio        | `.mp3`                 |
-
-Maximum file size: **50 MB**
-
----
-
-## Security
-
-- All endpoints require a valid **JWT token** (validated at the API Gateway).
-- Upload, delete, and transcript update require **ROLE_TEACHER**.
-- Teachers can only delete/update their own materials (enforced at the service layer).
-- Supabase service key is never exposed to the frontend; all storage operations happen server-side.
+This service registers with **Eureka** under the name `MATERIAL-SERVICE`. The API Gateway routes `/materials/**` to this service via load-balanced Eureka discovery.
