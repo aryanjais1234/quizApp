@@ -1,6 +1,9 @@
 import io
+import logging
 import re
 from typing import List
+
+logger = logging.getLogger(__name__)
 
 try:
     import pdfplumber  # preferred PDF extractor
@@ -111,6 +114,10 @@ class DocumentProcessor:
     def process_text(self, text: str, source_id: str) -> List[dict]:
         """Return a list of chunk dicts ready for the embedding pipeline."""
         if len(text) > self.MAX_TEXT_LENGTH:
+            logger.warning(
+                "Text for source %s truncated from %d to %d characters",
+                source_id, len(text), self.MAX_TEXT_LENGTH,
+            )
             text = text[: self.MAX_TEXT_LENGTH]
         chunks = self.chunk_text(text)
         return [
