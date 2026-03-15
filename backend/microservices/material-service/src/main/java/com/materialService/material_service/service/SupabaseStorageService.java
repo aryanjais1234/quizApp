@@ -1,12 +1,8 @@
 package com.materialService.material_service.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,15 +14,6 @@ public class SupabaseStorageService {
 
     @Autowired
     private SupabaseConfig config;
-//
-////    @Value("${supabase.url}")
-//    private String supabaseUrl;
-//
-////    @Value("${supabase.service-key}")
-//    private String supabaseServiceKey;
-//
-////    @Value("${supabase.bucket}")
-    private String bucket;
 
     private final RestTemplate restTemplate = new RestTemplate();
 
@@ -35,7 +22,7 @@ public class SupabaseStorageService {
      */
     public String uploadFile(MultipartFile file, String teacherUsername) throws IOException {
         String uniqueFileName = teacherUsername + "/" + UUID.randomUUID() + "_" + file.getOriginalFilename();
-        String uploadUrl = config.getUrl() + "/storage/v1/object/" + bucket + "/" + uniqueFileName;
+        String uploadUrl = config.getUrl() + "/storage/v1/object/" + config.getBucket() + "/" + uniqueFileName;
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + config.getServiceKey());
@@ -48,19 +35,19 @@ public class SupabaseStorageService {
 
         restTemplate.exchange(uploadUrl, HttpMethod.POST, requestEntity, String.class);
 
-        return config.getUrl() + "/storage/v1/object/public/" + bucket + "/" + uniqueFileName;
+        return config.getUrl() + "/storage/v1/object/public/" + config.getBucket() + "/" + uniqueFileName;
     }
 
     /**
      * Deletes a file from Supabase Storage given its public URL.
      */
     public void deleteFile(String fileUrl) {
-        String prefix = config.getUrl() + "/storage/v1/object/public/" + bucket + "/";
+        String prefix = config.getUrl() + "/storage/v1/object/public/" + config.getBucket() + "/";
         if (!fileUrl.startsWith(prefix)) {
             return;
         }
         String filePath = fileUrl.substring(prefix.length());
-        String deleteUrl = config.getUrl() + "/storage/v1/object/" + bucket + "/" + filePath;
+        String deleteUrl = config.getUrl() + "/storage/v1/object/" + config.getBucket() + "/" + filePath;
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + config.getServiceKey());
