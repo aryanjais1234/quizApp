@@ -4,6 +4,9 @@ class Settings(BaseSettings):
     # Gemini API
     gemini_api_key: str
 
+    # Gemini model name
+    gemini_model: str = "gemini-1.5-flash"
+
     # JWT (must match Spring Boot secret)
     jwt_secret: str
     jwt_algorithm: str = "HS256"
